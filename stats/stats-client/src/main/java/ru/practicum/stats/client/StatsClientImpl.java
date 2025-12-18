@@ -3,12 +3,10 @@ package ru.practicum.stats.client;
 import ru.practicum.stats.dto.EndpointHitDto;
 import ru.practicum.stats.dto.ViewStatsDto;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.DefaultUriBuilderFactory;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.http.ResponseEntity;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -17,18 +15,23 @@ import java.util.List;
 
 @Component
 public class StatsClientImpl implements StatsClient {
-    private final RestTemplate restTemplate;
 
-    public StatsClientImpl(@Value("${stats-server.url}") String serverUrl,
-            RestTemplateBuilder builder) {
-        this.restTemplate = builder
-                .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
+    private final RestClient restClient;
+
+    public StatsClientImpl(@Value("${stats-server.url}") String serverUrl) {
+        this.restClient = RestClient.builder()
+                .baseUrl(serverUrl)
                 .build();
     }
 
     @Override
     public void hit(EndpointHitDto hit) {
-        restTemplate.postForLocation("/hit", hit);
+        restClient.post()
+                .uri("/hit")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(hit)
+                .retrieve()
+                .toBodilessEntity();
     }
 
     @Override
@@ -48,15 +51,14 @@ public class StatsClientImpl implements StatsClient {
             uris.forEach(uri -> uriBuilder.queryParam("uris", uri));
         }
 
-        ResponseEntity<ViewStatsDto[]> response =
-                restTemplate.getForEntity(
-                        uriBuilder.toUriString(),
-                        ViewStatsDto[].class
-                );
+        ViewStatsDto[] response = restClient.get()
+                .uri(uriBuilder.toUriString())
+                .retrieve()
+                .body(ViewStatsDto[].class);
 
-        return response.getBody() == null
+        return response == null
                 ? List.of()
-                : Arrays.asList(response.getBody());
+                : Arrays.asList(response);
     }
 
     private String encode(String value) {
