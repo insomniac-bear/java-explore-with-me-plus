@@ -1,8 +1,12 @@
-package ru.practicum;
+package ru.practicum.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.EndpointHitDto;
+import ru.practicum.model.EndpointHit;
+import ru.practicum.model.EndpointHitMapper;
+import ru.practicum.repository.StatsRepository;
 
 @Service
 @Slf4j

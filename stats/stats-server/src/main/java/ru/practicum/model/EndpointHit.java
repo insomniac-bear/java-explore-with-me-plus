@@ -1,9 +1,8 @@
-package ru.practicum;
+package ru.practicum.model;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,7 +16,7 @@ import java.time.LocalDateTime;
 public class EndpointHit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false, name = "app")
     private String app;

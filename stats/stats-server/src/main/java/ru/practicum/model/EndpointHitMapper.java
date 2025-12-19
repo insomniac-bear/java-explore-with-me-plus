@@ -1,6 +1,7 @@
-package ru.practicum;
+package ru.practicum.model;
 
 import org.springframework.stereotype.Component;
+import ru.practicum.EndpointHitDto;
 
 @Component
 public class EndpointHitMapper {
@@ -17,7 +18,7 @@ public class EndpointHitMapper {
         return endpointHitDto;
     }
 
-    EndpointHit  mapToEndpointHit(EndpointHitDto endpointHitDto) {
+    public EndpointHit  mapToEndpointHit(EndpointHitDto endpointHitDto) {
         EndpointHit endpointHit = EndpointHit.builder()
                 .id(endpointHitDto.getId())
                 .app(endpointHitDto.getApp())
