@@ -83,6 +83,7 @@ class StatsServiceIntegrationTests {
         assertThat(dto.getUri()).isEqualTo("/page1");
         assertThat(dto.getHits()).isEqualTo(2L);
     }
+
     @Test
     void shouldGetUniqueStatsWithoutUris() {
         statsRepository.save(EndpointHit.builder()
