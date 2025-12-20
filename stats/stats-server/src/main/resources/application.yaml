@@ -7,7 +7,12 @@ spring:
     url: jdbc:postgresql://localhost:6541/stats
     username: stats
     password: stats
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
 
 sql:
   init:
+    mode: always
     schema-locations: classpath:schema.sql
