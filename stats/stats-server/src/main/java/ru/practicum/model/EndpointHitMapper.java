@@ -1,7 +1,7 @@
 package ru.practicum.model;
 
 import org.springframework.stereotype.Component;
-import ru.practicum.EndpointHitDto;
+import ru.practicum.dto.EndpointHitDto;
 
 @Component
 public class EndpointHitMapper {

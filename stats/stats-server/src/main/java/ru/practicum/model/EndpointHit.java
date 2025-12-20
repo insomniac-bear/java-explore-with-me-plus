@@ -25,6 +25,7 @@ public class EndpointHit {
     @Column(nullable = false, name = "user_ip")
     private String ip;
     @Column(nullable = false)
+    @Builder.Default
     private LocalDateTime timestamp = LocalDateTime.now();
 
 }
