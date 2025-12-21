@@ -1,6 +1,7 @@
 package ru.practicum.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,13 +19,21 @@ public class EndpointHit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, name = "app")
+
+    @NotNull
+    @Column(name = "app")
     private String app;
-    @Column(nullable = false, name = "uri")
+
+    @NotNull
+    @Column(name = "uri")
     private String uri;
-    @Column(nullable = false, name = "user_ip")
+
+    @NotNull
+    @Column(name = "user_ip")
     private String ip;
-    @Column(nullable = false)
+
+    @NotNull
+    @Column
     @Builder.Default
     private LocalDateTime timestamp = LocalDateTime.now();
 

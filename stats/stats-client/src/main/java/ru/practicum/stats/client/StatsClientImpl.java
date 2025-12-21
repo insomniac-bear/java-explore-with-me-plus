@@ -1,12 +1,12 @@
 package ru.practicum.stats.client;
 
-import ru.practicum.stats.dto.EndpointHitDto;
-import ru.practicum.stats.dto.ViewStatsDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
+import ru.practicum.dto.EndpointHitDto;
+import ru.practicum.dto.ViewStatsDto;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -35,11 +35,10 @@ public class StatsClientImpl implements StatsClient {
     }
 
     @Override
-    public List<ViewStatsDto> getStats(
-            String start,
-            String end,
-            List<String> uris,
-            boolean unique
+    public List<ViewStatsDto> getStats(String start,
+                                       String end,
+                                       List<String> uris,
+                                       boolean unique
     ) {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder
                 .fromPath("/stats")

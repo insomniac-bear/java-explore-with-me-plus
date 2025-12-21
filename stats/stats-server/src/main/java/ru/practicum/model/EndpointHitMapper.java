@@ -1,32 +1,22 @@
 package ru.practicum.model;
 
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import ru.practicum.dto.EndpointHitDto;
 
-@Component
-public class EndpointHitMapper {
+@Mapper(componentModel = "spring")
+public interface EndpointHitMapper {
+    @Mapping(target = "id", source = "endpointHit.id")
+    @Mapping(target = "app", source = "endpointHit.app")
+    @Mapping(target = "uri", source = "endpointHit.uri")
+    @Mapping(target = "ip", source = "endpointHit.ip")
+    @Mapping(target = "timestamp", source = "endpointHit.timestamp")
+    EndpointHitDto mapToEndpointHitDto(EndpointHit endpointHit);
 
-    public EndpointHitDto mapToEndpointHitDto(EndpointHit endpointHit) {
-
-        EndpointHitDto endpointHitDto = EndpointHitDto.builder()
-                .id(endpointHit.getId())
-                .app(endpointHit.getApp())
-                .uri(endpointHit.getUri())
-                .ip(endpointHit.getIp())
-                .timestamp(endpointHit.getTimestamp())
-                .build();
-        return endpointHitDto;
-    }
-
-    public EndpointHit  mapToEndpointHit(EndpointHitDto endpointHitDto) {
-        EndpointHit endpointHit = EndpointHit.builder()
-                .id(endpointHitDto.getId())
-                .app(endpointHitDto.getApp())
-                .uri(endpointHitDto.getUri())
-                .ip(endpointHitDto.getIp())
-                .timestamp(endpointHitDto.getTimestamp())
-                .build();
-        return endpointHit;
-    }
-
+    @Mapping(target = "id", source = "endpointHitDto.id")
+    @Mapping(target = "app", source = "endpointHitDto.app")
+    @Mapping(target = "uri", source = "endpointHitDto.uri")
+    @Mapping(target = "ip", source = "endpointHitDto.ip")
+    @Mapping(target = "timestamp", source = "endpointHitDto.timestamp")
+    EndpointHit mapToEndpointHit(EndpointHitDto endpointHitDto);
 }
