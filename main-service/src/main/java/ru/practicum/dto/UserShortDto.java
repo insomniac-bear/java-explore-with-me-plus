@@ -1,4 +1,4 @@
-package ru.practicum.users.dto;
+package ru.practicum.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

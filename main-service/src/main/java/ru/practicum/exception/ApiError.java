@@ -1,4 +1,4 @@
-package ru.practicum.users.exception;
+package ru.practicum.exception;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

@@ -1,8 +1,8 @@
-package ru.practicum.users;
+package ru.practicum.service;
 
 import org.springframework.stereotype.Service;
-import ru.practicum.users.dto.NewUserRequestDto;
-import ru.practicum.users.dto.UserDto;
+import ru.practicum.dto.NewUserRequestDto;
+import ru.practicum.dto.UserDto;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public NewUserRequestDto addUser(NewUserRequestDto newUserRequestDto) {
+    public NewUserRequestDto addUser(NewUserRequestDto userRequestDto) {
         return null;
     }
 
