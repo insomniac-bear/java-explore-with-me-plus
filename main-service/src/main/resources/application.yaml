@@ -10,3 +10,13 @@ spring:
     url: jdbc:postgresql://localhost:6642/main
     username: main
     password: main
+
+  jpa:
+    show-sql: true
+    hibernate:
+    ddl-auto: update
+
+  sql:
+    init:
+    mode: always
+    schema-locations: classpath:schema.sql
