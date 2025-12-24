@@ -1,23 +1,20 @@
 package ru.practicum.dto;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 @Data
 @Builder
 public class NewUserRequestDto {
     @Email
-    @Max(254)
-    @Min(6)
+    @Length(min = 6, max = 254)
     @NotNull
     private String email;
 
-    @Max(250)
-    @Min(2)
+    @Length(min = 2, max = 250)
     @NotNull
     private String name;
 }

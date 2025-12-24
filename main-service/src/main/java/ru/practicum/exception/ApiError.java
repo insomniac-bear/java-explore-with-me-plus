@@ -1,18 +1,33 @@
 package ru.practicum.exception;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
+@Data
 public class ApiError {
 
     private static final String TIMESTAMP_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
-    String description;
-    List<String> errors;
-    String message;
-    String reason;
-    String status;
-    String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(TIMESTAMP_PATTERN));
+    private String description;
+    private String stackTrace;
+    private String message;
+    private String reason;
+    private HttpStatus status;
+    private String timestamp;
+
+    public ApiError(String description, String stackTrace, String message,
+                    HttpStatus status, String reason) {
+        this.description = description;
+        this.stackTrace = stackTrace;
+        this.message = message;
+        this.status = status;
+        this.reason = reason;
+        this.timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern(TIMESTAMP_PATTERN));
+    }
 
 }

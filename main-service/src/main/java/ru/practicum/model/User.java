@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "users")
@@ -22,14 +23,12 @@ public class User {
     private Long id;
 
     @Email
-    @Max(254)
-    @Min(6)
+    @Length(min = 6, max = 254)
     @NotNull
     @Column(nullable = false, unique = true, name = "email")
     private String email;
 
-    @Max(250)
-    @Min(2)
+    @Length(min = 2, max = 250)
     @NotNull
     @Column(nullable = false, name = "name")
     private String name;
