@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class UserShortDto {
 
+    @NotNull
     private Long id;
 
     @Max(250)
