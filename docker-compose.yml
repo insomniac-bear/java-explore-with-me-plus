@@ -42,7 +42,7 @@ services:
     healthcheck:
       test: ["CMD", "pg_isready", "-q", "-d", "ewm", "-U", "ewm"]
       interval: 10s
-      timeout: 5s
+      timeout: 6s
       retries: 20
 
   ewm-service:
