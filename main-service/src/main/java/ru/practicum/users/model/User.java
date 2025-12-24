@@ -1,4 +1,4 @@
-package ru.practicum.users;
+package ru.practicum.users.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -25,12 +25,12 @@ public class User {
     @Max(254)
     @Min(6)
     @NotNull
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, name = "email")
     private String email;
 
     @Max(250)
     @Min(2)
     @NotNull
-    @Column(nullable = false)
+    @Column(nullable = false, name = "name")
     private String name;
 }
