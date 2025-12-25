@@ -26,6 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getUsers(List<Long> ids, Pageable pageable) {
+        log.debug("Get users by ids {}", ids);
         if (ids == null || ids.isEmpty()) {
             return userRepository.findAll(pageable)
                     .stream()
@@ -41,6 +42,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto addUser(NewUserRequestDto newUserRequestDto) {
+        log.debug("Add user {}", newUserRequestDto);
         User user = userMapper.mapNewUserRequestDtoToUser(newUserRequestDto);
         return userMapper.mapUserToUserDto(userRepository.save(user));
     }
@@ -48,6 +50,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void delete(Long userId) {
+        log.debug("Delete user {}", userId);
         if (!userRepository.existsById(userId)) {
             log.info("User with id: {} was not found", userId);
             throw new NotFoundException("User not found");
