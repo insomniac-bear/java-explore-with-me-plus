@@ -1,5 +1,6 @@
 package ru.practicum.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
@@ -9,6 +10,6 @@ public class UserShortDto {
     private Long id;
 
     @Length(min = 2, max = 250)
-    @NotNull
+    @NotBlank
     private String name;
 }

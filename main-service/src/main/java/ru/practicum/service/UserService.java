@@ -10,7 +10,7 @@ public interface UserService {
 
     List<UserDto> getUsers(List<Long> ids, Pageable pageable);
 
-    NewUserRequestDto addUser(NewUserRequestDto userRequestDto);
+    UserDto addUser(NewUserRequestDto userRequestDto);
 
     void delete(Long userId);
 

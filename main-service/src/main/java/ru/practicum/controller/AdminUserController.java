@@ -25,12 +25,12 @@ public class AdminUserController {
                                   @RequestParam (defaultValue = "0") int from,
                                   @RequestParam(defaultValue = "10") int size
     ) {
-        return userService.getUsers(ids, PageRequest.of(from,size));
+        return userService.getUsers(ids, PageRequest.of(from /size, size));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public NewUserRequestDto createUser(@Valid @RequestBody NewUserRequestDto userRequestDto) {
+    public UserDto createUser(@Valid @RequestBody NewUserRequestDto userRequestDto) {
         log.info("Create new user {}", userRequestDto);
         return userService.addUser(userRequestDto);
     }

@@ -5,14 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-@ControllerAdvice
+@RestControllerAdvice
 @Slf4j
 public class ErrorHandler {
 
@@ -75,6 +75,19 @@ public class ErrorHandler {
                 e.getMessage(),
                 HttpStatus.BAD_REQUEST,
                 "VALIDATION_ERROR"
+        );
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiError handleNotFoundException(NotFoundException e) {
+        log.info("400 Bad Request: {}", e.getMessage(), e);
+        return new ApiError(
+                "Not Found",
+                "",
+                e.getMessage(),
+                HttpStatus.BAD_REQUEST,
+                "NOT_FOUND_ERROR"
         );
     }
 }
