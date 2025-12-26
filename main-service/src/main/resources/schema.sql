@@ -5,3 +5,8 @@ CREATE table IF NOT EXISTS users (
     email VARCHAR(254) NOT NULL UNIQUE CHECK(LENGTH(email) >= 6),
     name VARCHAR(250) NOT NULL CHECK(LENGTH(name) >= 2)
     );
+
+CREATE TABLE IF NOT EXISTS categories (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE
+);
