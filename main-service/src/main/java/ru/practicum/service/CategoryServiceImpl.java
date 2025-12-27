@@ -1,13 +1,13 @@
-package ru.practicum.category.service;
+package ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.category.dto.CategoryDto;
-import ru.practicum.category.mapper.CategoryMapper;
-import ru.practicum.category.model.Category;
-import ru.practicum.category.repository.CategoryRepository;
+import ru.practicum.dto.CategoryDto;
+import ru.practicum.mapper.CategoryMapper;
+import ru.practicum.model.Category;
+import ru.practicum.repository.CategoryRepository;
 
 import java.util.NoSuchElementException;
 
