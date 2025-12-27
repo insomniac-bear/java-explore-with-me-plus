@@ -1,11 +1,11 @@
-package ru.practicum.category.controller;
+package ru.practicum.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.category.dto.CategoryDto;
-import ru.practicum.category.service.CategoryService;
+import ru.practicum.dto.CategoryDto;
+import ru.practicum.service.CategoryService;
 
 @RestController
 @RequiredArgsConstructor

@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.NewUserRequestDto;
 import ru.practicum.dto.UserDto;
-import ru.practicum.exception.NotFoundException;
 import ru.practicum.mapper.UserMapper;
 import ru.practicum.model.User;
 import ru.practicum.repository.UserRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
         log.debug("Delete user {}", userId);
         if (!userRepository.existsById(userId)) {
             log.info("User with id: {} was not found", userId);
-            throw new NotFoundException("User not found");
+            throw new NoSuchElementException("User not found");
         }
         userRepository.deleteById(userId);
         log.info("User with id: {} was deleted", userId);

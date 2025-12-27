@@ -1,6 +1,6 @@
-package ru.practicum.category.service;
+package ru.practicum.service;
 
-import ru.practicum.category.dto.CategoryDto;
+import ru.practicum.dto.CategoryDto;
 
 public interface CategoryService {
     CategoryDto add(CategoryDto dto);
