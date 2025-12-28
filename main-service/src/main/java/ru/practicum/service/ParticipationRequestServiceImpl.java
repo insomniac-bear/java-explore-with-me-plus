@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.dto.ParticipationRequestDto;
+import ru.practicum.repository.ParticipationRequestRepository;
 
 @Service
 @Transactional
@@ -16,9 +17,8 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Override
     public ParticipationRequestDto createRequest(Long userId, Long eventId) {
+        log.info("Create request");
         return null;
     }
-
-    private
 
 }
