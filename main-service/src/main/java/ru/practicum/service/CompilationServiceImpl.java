@@ -9,8 +9,8 @@ import ru.practicum.repository.CompilationRepository;
 import ru.practicum.dto.CompilationDto;
 import ru.practicum.dto.NewCompilationDto;
 import ru.practicum.dto.UpdateCompilationRequest;
-import ru.practicum.event.model.Event;
-import ru.practicum.event.repository.EventRepository;
+import ru.practicum.model.Event;
+import ru.practicum.repository.EventRepository;
 
 import java.util.NoSuchElementException;
 import java.util.Set;
