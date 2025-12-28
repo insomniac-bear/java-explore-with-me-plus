@@ -6,6 +6,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -54,6 +55,20 @@ public class ErrorHandler {
         return ApiError.builder()
                 .status("BAD_REQUEST")
                 .reason("Incorrectly made request.")
+                .message(e.getMessage())
+                .errors(List.of())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    @ExceptionHandler({
+            ResourceAccessException.class
+    })
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ApiError handleForbiddenRequest(Exception e) {
+        return ApiError.builder()
+                .status("FORBIDDEN")
+                .reason("Access denied.")
                 .message(e.getMessage())
                 .errors(List.of())
                 .timestamp(LocalDateTime.now())
