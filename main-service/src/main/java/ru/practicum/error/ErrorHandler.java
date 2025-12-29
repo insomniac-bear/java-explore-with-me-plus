@@ -19,6 +19,7 @@ public class ErrorHandler {
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiError handleNotFound(NoSuchElementException e) {
+        log.warn("NotFoundException: {}", e.getMessage(), e);
         return ApiError.builder()
                 .status("NOT_FOUND")
                 .reason("The required object was not found.")
@@ -34,6 +35,7 @@ public class ErrorHandler {
     })
     @ResponseStatus(HttpStatus.CONFLICT)
     public ApiError handleConflict(RuntimeException e) {
+        log.error("ConflictException: {}", e.getMessage(), e);
         return ApiError.builder()
                 .status("CONFLICT")
                 .reason("Integrity constraint has been violated.")
@@ -49,6 +51,7 @@ public class ErrorHandler {
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleBadRequest(Exception e) {
+        log.warn("BadRequestException: {}", e.getMessage(), e);
         return ApiError.builder()
                 .status("BAD_REQUEST")
                 .reason("Incorrectly made request.")

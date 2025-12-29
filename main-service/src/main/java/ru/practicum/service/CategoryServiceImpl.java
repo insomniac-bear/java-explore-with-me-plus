@@ -8,6 +8,7 @@ import ru.practicum.dto.CategoryDto;
 import ru.practicum.mapper.CategoryMapper;
 import ru.practicum.model.Category;
 import ru.practicum.repository.CategoryRepository;
+import ru.practicum.repository.EventRepository;
 
 import java.util.NoSuchElementException;
 
@@ -17,6 +18,7 @@ import java.util.NoSuchElementException;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository repository;
+    private final EventRepository eventRepository;
     private final CategoryMapper mapper;
 
     @Override
