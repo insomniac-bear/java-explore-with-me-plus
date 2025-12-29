@@ -1,11 +1,21 @@
 package ru.practicum.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.util.ParticipationRequestStatus;
 
+import java.sql.Timestamp;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ParticipationRequestDto {
     private Long id;
-    private String created;
+    private Timestamp created;
     private Long event;
-    private Long requestor;
+    private Long requester;
     private ParticipationRequestStatus status;
 }
