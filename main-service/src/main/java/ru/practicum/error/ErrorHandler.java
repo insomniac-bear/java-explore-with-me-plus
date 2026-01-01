@@ -31,7 +31,8 @@ public class ErrorHandler {
 
     @ExceptionHandler({
             DataIntegrityViolationException.class,
-            IllegalStateException.class
+            IllegalStateException.class,
+            ConflictException.class
     })
     @ResponseStatus(HttpStatus.CONFLICT)
     public ApiError handleConflict(RuntimeException e) {

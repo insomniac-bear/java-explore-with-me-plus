@@ -38,7 +38,6 @@ public class EventServiceImpl implements EventService {
 
         Category category = categoryRepository.findById(req.getCategory())
                 .orElseThrow(() -> {
-                    log.error("Попытка создания события {} с несуществующей категорией с id {}", req, req.getCategory());
                     return new NoSuchElementException("Category with id " + req.getCategory() + " notFound");
                 });
 
@@ -82,7 +81,6 @@ public class EventServiceImpl implements EventService {
         if (req.getCategory() != null) {
             category = categoryRepository.findById(req.getCategory())
                     .orElseThrow(() -> {
-                        log.error("Попытка обновления события {} с несуществующей категорией с id {}", req, req.getCategory());
                         return new NoSuchElementException("Category with id " + req.getCategory() + " notFound");
                     });
         }
@@ -96,7 +94,6 @@ public class EventServiceImpl implements EventService {
     private User findUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> {
-                    log.error("Попытка найти несуществующего пользователя с id {}", userId);
                     return new NoSuchElementException("User with id " + userId + " notFound");
                 });
     }
@@ -104,14 +101,12 @@ public class EventServiceImpl implements EventService {
     private Event findEvent(Long eventId) {
         return eventRepository.findById(eventId)
                 .orElseThrow(() -> {
-                    log.error("Попытка найти несуществующее событие с id {}", eventId);
                     return new NoSuchElementException("Event with id " + eventId + " notFound");
                 });
     }
 
     private void checkPermission(Event event, User user) {
         if (!event.getInitiator().equals(user)) {
-            log.error("Попытка доступа пользователя {} к чужому событию {}", user, event);
             throw new ResourceAccessException("Access to event " + event + " forbidden");
         }
     }

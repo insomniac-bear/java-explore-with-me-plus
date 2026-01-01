@@ -24,6 +24,7 @@ public class EventResponseDto {
 
     private String description;
 
+    @JsonFormat(pattern = TIMESTAMP_PATTERN)
     private LocalDateTime eventDate;
 
     private Long id;
@@ -36,6 +37,7 @@ public class EventResponseDto {
 
     private Integer participantLimit;
 
+    @JsonFormat(pattern = TIMESTAMP_PATTERN)
     private LocalDateTime publishedOn;
 
     private Boolean requestModeration;

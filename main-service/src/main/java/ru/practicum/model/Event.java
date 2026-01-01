@@ -72,6 +72,8 @@ public class Event {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @Column(name = "confirmed_requests")
+    private int confirmedRequests;
 
     @Override
     public String toString() {
