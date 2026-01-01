@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -130,7 +131,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     public EventRequestStatusUpdateResult updateRequestStatus(Long userId, Long eventId, EventRequestStatusUpdateRequest updateRequestStatus) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NoSuchElementException("Event with id " + eventId + " does not exist"));
-        if (!(event.getInitiator().getId() == userId)) {
+        if (!(Objects.equals(event.getInitiator().getId(), userId))) {
             throw new ResourceAccessException("Статус запросов может менять только инициатор события");
         }
 
@@ -140,7 +141,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
         List<ParticipationRequest> requests = requestRepository.findAllById(updateRequestStatus.getRequestIds());
         for (ParticipationRequest request : requests) {
-            if (request.getEvent().getId() != eventId) {
+            if (!Objects.equals(request.getEvent().getId(), eventId)) {
                 throw new ConflictException("There is no request with id " + request.getId() + " for event " + eventId);
             }
             if (request.getStatus() != ParticipationRequestStatus.PENDING) {
