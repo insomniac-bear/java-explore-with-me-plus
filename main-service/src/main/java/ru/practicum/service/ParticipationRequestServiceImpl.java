@@ -45,13 +45,11 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> {
-                    log.error("User not found with id {}", userId);
                     return new NoSuchElementException("User with id " + userId + "does not exist");
                 });
 
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> {
-                    log.error("Event not found with id {}", eventId);
                     return new NoSuchElementException("Event with id " + eventId + "does not exist");
                 });
 
