@@ -127,7 +127,14 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     @Override
     public List<ParticipationRequestDto> getUsersRequests(Long userId, Long eventId) {
         log.info("Service get requests for user {} and event {}", userId, eventId);
-        //добавить проверки на юзер и ивент !!!!!!!!!!!!
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NoSuchElementException("Event with id " + eventId + " does not exist"));
+
+        if (event.getInitiator().getId() != userId) {
+            throw new ResourceAccessException("Запросы может просматривать только инициатор события");
+        }
+
         return requestRepository.findAllByEventId(eventId)
                 .stream()
                 .map(requestMapper::mapToDto)
