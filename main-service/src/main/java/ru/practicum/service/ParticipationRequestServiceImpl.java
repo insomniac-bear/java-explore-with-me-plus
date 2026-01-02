@@ -127,7 +127,11 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     @Override
     public List<ParticipationRequestDto> getUsersRequests(Long userId, Long eventId) {
         log.info("Service get requests for user {} and event {}", userId, eventId);
-        return requestRepository.findAllByIId();
+        //добавить проверки на юзер и ивент !!!!!!!!!!!!
+        return requestRepository.findAllByEventId(eventId)
+                .stream()
+                .map(requestMapper::mapToDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional
