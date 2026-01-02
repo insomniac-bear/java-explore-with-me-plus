@@ -88,7 +88,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     }
 
     @Override
-    public List<ParticipationRequestDto> getOtherUsersRequests(Long userId) {
+    public List<ParticipationRequestDto> getOtherUsersEventsRequests(Long userId) {
         log.info("Service get requests for user {}", userId);
         if (!userRepository.existsById(userId)) {
             log.info("User {} does not exist", userId);

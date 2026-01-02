@@ -29,7 +29,7 @@ public class ParticipationRequestController {
     @ResponseStatus(HttpStatus.OK)
     public List<ParticipationRequestDto> getRequests(@PathVariable Long userId) {
         log.info("Request from user {} for other users events", userId);
-        return requestService.getOtherUsersRequests(userId);
+        return requestService.getOtherUsersEventsRequests(userId);
     }
 
     @PatchMapping("/{requestId}/cancel")
