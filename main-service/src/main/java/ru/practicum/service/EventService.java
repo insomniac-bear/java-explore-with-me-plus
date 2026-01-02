@@ -1,13 +1,9 @@
 package ru.practicum.service;
 
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import ru.practicum.dto.*;
 import ru.practicum.model.AdminEventParam;
-import ru.practicum.model.Category;
-import ru.practicum.util.EventState;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 public interface EventService {
