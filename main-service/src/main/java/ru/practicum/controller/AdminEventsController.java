@@ -37,14 +37,15 @@ public class AdminEventsController {
     {
         log.info("Got request for Admin: search events");
         AdminEventParam param = new AdminEventParam(usersIds, states, categories,rangeStart, rangeEnd);
-        return eventService.getAdminEvents(param, PageRequest.of(from / size, size, Sort.by("id").ascending());
+        return eventService.getAdminEvents(param,
+                PageRequest.of(from / size, size, Sort.by("id").ascending()));
     }
 
-    @PatchMapping("/{eventId")
+    @PatchMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
     public EventResponseDto update(@PathVariable Long eventId,
                                    UpdateEventAdminRequest req) {
         log.info("Got request for Admin: update event");
-        return eventService.updateAdminEvent(eventId,req);
+        return eventService.updateAdminEvent(eventId, req);
     }
 }
