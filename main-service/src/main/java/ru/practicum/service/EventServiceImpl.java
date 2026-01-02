@@ -18,6 +18,7 @@ import ru.practicum.repository.UserRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -91,7 +92,10 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventResponseDto> getAdminEvents(AdminEventParam param, Pageable pageable) {
-        return List.of();
+
+        return eventRepository.getAdminEvents(param, pageable).stream()
+                .map(mapper::eventToEventResponseDto)
+                .collect(Collectors.toList());
     }
 
     @Override

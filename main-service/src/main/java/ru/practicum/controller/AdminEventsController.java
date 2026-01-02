@@ -13,7 +13,7 @@ import ru.practicum.model.Category;
 import ru.practicum.service.EventService;
 import ru.practicum.util.EventState;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -27,16 +27,16 @@ public class AdminEventsController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<EventResponseDto> findAll(
-            @RequestParam(required = false) List<Integer> usersIds,
+            @RequestParam(required = false) List<Integer> users,
             @RequestParam(required = false) List<EventState> states,
             @RequestParam(required = false) List<Category> categories,
-            @RequestParam(required = false) Timestamp rangeStart,
-            @RequestParam(required = false) Timestamp rangeEnd,
+            @RequestParam(required = false) LocalDateTime rangeStart,
+            @RequestParam(required = false) LocalDateTime rangeEnd,
             @RequestParam(defaultValue = "0") Integer from,
             @RequestParam(defaultValue = "10") Integer size)
     {
         log.info("Got request for Admin: search events");
-        AdminEventParam param = new AdminEventParam(usersIds, states, categories,rangeStart, rangeEnd);
+        AdminEventParam param = new AdminEventParam(users, states, categories,rangeStart, rangeEnd);
         return eventService.getAdminEvents(param,
                 PageRequest.of(from / size, size, Sort.by("id").ascending()));
     }
