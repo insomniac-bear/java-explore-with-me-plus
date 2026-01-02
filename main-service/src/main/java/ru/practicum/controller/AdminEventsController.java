@@ -1,0 +1,45 @@
+package ru.practicum.controller;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import ru.practicum.dto.EventResponseDto;
+import ru.practicum.model.Category;
+import ru.practicum.service.EventService;
+import ru.practicum.util.EventState;
+
+import java.sql.Timestamp;
+import java.util.List;
+
+@RestController
+@RequestMapping("/admin/events")
+@RequiredArgsConstructor
+@Slf4j
+public class AdminEventsController {
+
+    private final EventService eventService;
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<EventResponseDto> findAll(
+            @RequestParam(required = false) List<Integer> usersIds,
+            @RequestParam(required = false) List<EventState> states,
+            @RequestParam(required = false) List<Category> categories,
+            @RequestParam(required = false) Timestamp rangeStart,
+            @RequestParam(required = false) Timestamp rangeEnd,
+            @RequestParam(defaultValue = "0") Integer from,
+            @RequestParam(defaultValue = "10") Integer size)
+    {
+        log.info("Got request for Admin: search events");
+        return eventService.getAdminEvents(usersIds, states, categories,rangeStart, rangeEnd, PageRequest.of(from / size, size, Sort.by("id").ascending()));
+    }
+
+    @PatchMapping("/{eventId")
+    @ResponseStatus(HttpStatus.OK)
+    public EventResponseDto update(@PathVariable Long eventId) {
+        return null;
+    }
+}
