@@ -2,22 +2,23 @@ package ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
-import ru.practicum.dto.EventResponseDto;
-import ru.practicum.dto.NewEventRequestDto;
-import ru.practicum.dto.ShortEventResponseDto;
-import ru.practicum.dto.UpdateEventRequestDto;
+import ru.practicum.dto.*;
 import ru.practicum.mapper.EventMapper;
+import ru.practicum.model.AdminEventParam;
 import ru.practicum.model.Category;
 import ru.practicum.model.Event;
 import ru.practicum.model.User;
 import ru.practicum.repository.CategoryRepository;
 import ru.practicum.repository.EventRepository;
 import ru.practicum.repository.UserRepository;
+import ru.practicum.util.EventState;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -89,6 +90,16 @@ public class EventServiceImpl implements EventService {
         log.info("Сорбытие {} обновлено данными из запроса {}", updatingEvent, req);
 
         return mapper.eventToEventResponseDto(updatingEvent, user);
+    }
+
+    @Override
+    public List<EventResponseDto> getAdminEvents(AdminEventParam param, Pageable pageable) {
+        return List.of();
+    }
+
+    @Override
+    public EventResponseDto updateAdminEvent(Long eventId, UpdateEventAdminRequest req) {
+        return null;
     }
 
     private User findUser(Long userId) {

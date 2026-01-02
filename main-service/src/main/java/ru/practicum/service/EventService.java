@@ -2,10 +2,8 @@ package ru.practicum.service;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import ru.practicum.dto.EventResponseDto;
-import ru.practicum.dto.NewEventRequestDto;
-import ru.practicum.dto.ShortEventResponseDto;
-import ru.practicum.dto.UpdateEventRequestDto;
+import ru.practicum.dto.*;
+import ru.practicum.model.AdminEventParam;
 import ru.practicum.model.Category;
 import ru.practicum.util.EventState;
 
@@ -21,5 +19,7 @@ public interface EventService {
 
     EventResponseDto update(Long userId, Long eventId, UpdateEventRequestDto req);
 
-    List<EventResponseDto> getAdminEvents(List<Integer> usersIds, List<EventState> states, List<Category> categories, Timestamp rangeStart, Timestamp rangeEnd, PageRequest id);
+    List<EventResponseDto> getAdminEvents(AdminEventParam param, Pageable pageable);
+
+    EventResponseDto updateAdminEvent(Long eventId, UpdateEventAdminRequest req);
 }

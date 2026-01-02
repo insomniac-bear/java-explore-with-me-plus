@@ -3,33 +3,38 @@ package ru.practicum.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.util.EventStateAction;
 
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UpdateEventAdminRequest {
 
-        @Size(min = 3, max = 120)
-        private String title;
+    @Size(min = 3, max = 120)
+    private String title;
 
-        @Size(min = 20, max = 2000)
-        private String annotation;
+    @Size(min = 20, max = 2000)
+    private String annotation;
 
-        @Size(min = 20, max = 7000)
-        private String description;
+    @Size(min = 20, max = 7000)
+    private String description;
 
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        private LocalDateTime eventDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime eventDate;
 
-        @PositiveOrZero
-        private Integer participantLimit;
+    @PositiveOrZero
+    private Integer participantLimit;
 
-        private Integer category;
-        private LocationDto location;
-        private Boolean paid;
-        private Boolean requestModeration;
-        private EventStateAction stateAction;
-    }
+    private Integer category;
+    private LocationDto location;
+    private Boolean paid;
+    private Boolean requestModeration;
+    private EventStateAction stateAction;
 }
