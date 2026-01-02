@@ -57,7 +57,7 @@ public class UsersEventsController {
     @ResponseStatus(HttpStatus.OK)
     public List<ParticipationRequestDto> getRequests(@PathVariable Long userId, Long eventId) {
         log.info("Получение информации о запросах на участие в событии текущего пользователя");
-        return requestService.;
+        return requestService.getUsersRequests(userId, eventId);
     }
 
     @PatchMapping("/{eventId}/requests")

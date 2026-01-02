@@ -124,6 +124,12 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
         return requestMapper.mapToDto(requestRepository.save(request));
     }
 
+    @Override
+    public List<ParticipationRequestDto> getUsersRequests(Long userId, Long eventId) {
+        log.info("Service get requests for user {} and event {}", userId, eventId);
+        return requestRepository.findAllByIId();
+    }
+
     @Transactional
     @Override
     public EventRequestStatusUpdateResult updateRequestStatus(Long userId, Long eventId, EventRequestStatusUpdateRequest updateRequestStatus) {
