@@ -17,9 +17,9 @@ import static ru.practicum.util.Patterns.TIMESTAMP_PATTERN;
 @NoArgsConstructor
 @Builder
 public class AdminEventParam {
-    private List<Integer> users;
+    private List<Long> users;
     private List<EventState> states;
-    private List<Category> categories;
+    private List<Long> categories;
     @JsonFormat(pattern = TIMESTAMP_PATTERN)
     private LocalDateTime rangeStart;
     @JsonFormat(pattern = TIMESTAMP_PATTERN)

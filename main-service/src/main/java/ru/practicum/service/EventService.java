@@ -15,7 +15,7 @@ public interface EventService {
 
     EventResponseDto update(Long userId, Long eventId, UpdateEventRequestDto req);
 
-    List<EventResponseDto> getAdminEvents(AdminEventParam param, Pageable pageable);
+    List<AdminEventResponseDto> getAdminEvents(AdminEventParam param, Pageable pageable);
 
-    EventResponseDto updateAdminEvent(Long eventId, UpdateEventAdminRequest req);
+    AdminEventResponseDto updateAdminEvent(Long eventId, UpdateEventAdminRequest req);
 }

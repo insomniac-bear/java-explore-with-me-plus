@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.dto.AdminEventResponseDto;
 import ru.practicum.dto.EventResponseDto;
 import ru.practicum.dto.UpdateEventAdminRequest;
 import ru.practicum.model.AdminEventParam;
@@ -26,10 +27,10 @@ public class AdminEventsController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<EventResponseDto> findAll(
-            @RequestParam(required = false) List<Integer> users,
+    public List<AdminEventResponseDto> findAll(
+            @RequestParam(required = false) List<Long> users,
             @RequestParam(required = false) List<EventState> states,
-            @RequestParam(required = false) List<Category> categories,
+            @RequestParam(required = false) List<Long> categories,
             @RequestParam(required = false) LocalDateTime rangeStart,
             @RequestParam(required = false) LocalDateTime rangeEnd,
             @RequestParam(defaultValue = "0") Integer from,
@@ -43,7 +44,7 @@ public class AdminEventsController {
 
     @PatchMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public EventResponseDto update(@PathVariable Long eventId,
+    public AdminEventResponseDto update(@PathVariable Long eventId,
                                    UpdateEventAdminRequest req) {
         log.info("Got request for Admin: update event");
         return eventService.updateAdminEvent(eventId, req);

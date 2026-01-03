@@ -2,11 +2,13 @@ package ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import ru.practicum.dto.*;
+import ru.practicum.error.ConflictException;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.model.AdminEventParam;
 import ru.practicum.model.Category;
@@ -15,7 +17,10 @@ import ru.practicum.model.User;
 import ru.practicum.repository.CategoryRepository;
 import ru.practicum.repository.EventRepository;
 import ru.practicum.repository.UserRepository;
+import ru.practicum.util.EventState;
+import ru.practicum.util.EventStateAction;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -91,16 +96,19 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventResponseDto> getAdminEvents(AdminEventParam param, Pageable pageable) {
+    public List<AdminEventResponseDto> getAdminEvents(AdminEventParam param, Pageable pageable) {
 
         return eventRepository.getAdminEvents(param, pageable).stream()
-                .map(mapper::eventToEventResponseDto)
+                .map(mapper::toAdminEventFullDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public EventResponseDto updateAdminEvent(Long eventId, UpdateEventAdminRequest req) {
-        return null;
+    public AdminEventResponseDto updateAdminEvent(Long eventId, UpdateEventAdminRequest req) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NoSuchElementException("Event with id" + eventId + "not found"));
+Event updatedEvent = updateEventByAdmin(event, req);
+        return mapper.toAdminEventFullDto(eventRepository.save(updatedEvent));
     }
 
     private User findUser(Long userId) {
@@ -121,5 +129,77 @@ public class EventServiceImpl implements EventService {
         if (!event.getInitiator().equals(user)) {
             throw new ResourceAccessException("Access to event " + event + " forbidden");
         }
+    }
+
+    private Event updateEventByAdmin(Event event, UpdateEventAdminRequest update) {
+
+        if (update.getCategory() != null) {
+            Category category = categoryRepository.findById(Long.valueOf(update.getCategory()))
+                    .orElseThrow(() -> new NoSuchElementException("Category with id " + update.getCategory() + " doesnt exist "));
+            event.setCategory(category);
+        }
+
+        EventState state = event.getState();
+        EventStateAction updateStateAction = update.getStateAction();
+        if (updateStateAction != null) {
+
+            if (updateStateAction == EventStateAction.PUBLISH_EVENT) {
+                if (state != EventState.WAITING) {
+                    throw new ConflictException("Only events with waiting status could be published");
+                }
+                if (event.getEventDate().minusHours(1L).isBefore(LocalDateTime.now())) {
+                    throw new ConflictException("Event could be changed only one hour before now");
+                }
+                event.setState(EventState.PUBLISHED);
+                event.setPublishedOn(LocalDateTime.now());
+
+            } else if (updateStateAction == EventStateAction.REJECT_EVENT) {
+                if (state == EventState.PUBLISHED) {
+                    throw new ConflictException("Published event could not be rejected");
+                }
+                event.setState(EventState.REJECTED);
+
+            } else {
+                throw new NoSuchElementException("Unknown state action");
+            }
+        }
+
+        if (update.getTitle() != null) {
+            event.setTitle(update.getTitle());
+        }
+
+        if (update.getAnnotation() != null) {
+            event.setAnnotation(update.getAnnotation());
+        }
+
+        if (update.getDescription() != null) {
+            event.setDescription(update.getDescription());
+        }
+
+        if (update.getEventDate() != null) {
+            if (update.getEventDate().isBefore(LocalDateTime.now())) {
+                throw new ConflictException("Event date couldnt be in the past");
+            }
+            event.setEventDate(update.getEventDate());
+        }
+
+        if (update.getParticipantLimit() != null) {
+            event.setParticipantLimit(update.getParticipantLimit());
+        }
+
+        if (update.getLocation() != null) {
+            event.setLat(update.getLocation().getLat());
+            event.setLon(update.getLocation().getLat());
+        }
+
+        if (update.getPaid() != null) {
+            event.setPaid(update.getPaid());
+        }
+
+        if (update.getRequestModeration() != null) {
+            event.setRequestModeration(update.getRequestModeration());
+        }
+
+        return event;
     }
 }
