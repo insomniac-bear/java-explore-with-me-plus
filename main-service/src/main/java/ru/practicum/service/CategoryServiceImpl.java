@@ -2,6 +2,7 @@ package ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +53,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> findAll(Pageable pageable) {
-        return repository.findAll().stream()
+        Page<Category> categoryPage = repository.findAll(pageable);
+        return categoryPage.getContent().stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
     }

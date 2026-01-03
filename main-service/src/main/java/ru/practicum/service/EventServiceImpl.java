@@ -2,7 +2,7 @@ package ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +10,6 @@ import org.springframework.web.client.ResourceAccessException;
 import ru.practicum.dto.*;
 import ru.practicum.error.ConflictException;
 import ru.practicum.mapper.EventMapper;
-import ru.practicum.model.AdminEventParam;
 import ru.practicum.model.Category;
 import ru.practicum.model.Event;
 import ru.practicum.model.User;
@@ -28,7 +27,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class EventServiceImpl implements EventService {
     private final EventMapper mapper;
     private final CategoryRepository categoryRepository;
@@ -96,9 +95,18 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<AdminEventResponseDto> getAdminEvents(AdminEventParam param, Pageable pageable) {
+    public List<AdminEventResponseDto> findAdminEvents(
+            List<Long> users,
+            List<EventState> states,
+            List<Long> categories,
+            LocalDateTime rangeStart,
+            LocalDateTime rangeEnd,
+            Pageable pageable) {
 
-        return eventRepository.getAdminEvents(param, pageable).stream()
+        List<Event> events = eventRepository.findAdminEvents(
+                users, states, categories, rangeStart, rangeEnd, pageable);
+
+        return events.stream()
                 .map(mapper::toAdminEventFullDto)
                 .collect(Collectors.toList());
     }
@@ -106,9 +114,14 @@ public class EventServiceImpl implements EventService {
     @Override
     public AdminEventResponseDto updateAdminEvent(Long eventId, UpdateEventAdminRequest req) {
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new NoSuchElementException("Event with id" + eventId + "not found"));
-Event updatedEvent = updateEventByAdmin(event, req);
-        return mapper.toAdminEventFullDto(eventRepository.save(updatedEvent));
+                .orElseThrow(() -> new NoSuchElementException("Event with id " + eventId + " not found"));
+
+        Event updatedEvent = updateEventByAdmin(event, req);
+        Event savedEvent = eventRepository.save(updatedEvent);
+
+        log.info("Updated event: {}", savedEvent);
+
+        return mapper.toAdminEventFullDto(savedEvent);
     }
 
     private User findUser(Long userId) {
@@ -131,7 +144,8 @@ Event updatedEvent = updateEventByAdmin(event, req);
         }
     }
 
-    private Event updateEventByAdmin(Event event, UpdateEventAdminRequest update) {
+    @Transactional
+    public Event updateEventByAdmin(Event event, UpdateEventAdminRequest update) {
 
         if (update.getCategory() != null) {
             Category category = categoryRepository.findById(Long.valueOf(update.getCategory()))
@@ -141,7 +155,30 @@ Event updatedEvent = updateEventByAdmin(event, req);
 
         EventState state = event.getState();
         EventStateAction updateStateAction = update.getStateAction();
-        if (updateStateAction != null) {
+        if (updateStateAction == null) {
+            updateStateAction = EventStateAction.PUBLISH_EVENT;
+        }
+        if (updateStateAction == EventStateAction.PUBLISH_EVENT) {
+            if (state != EventState.WAITING) {
+                throw new ConflictException("Only events with waiting status could be published");
+            }
+            if (event.getEventDate().minusHours(1L).isBefore(LocalDateTime.now())) {
+                throw new ConflictException("Event could be changed only one hour before now");
+            }
+            event.setState(EventState.PUBLISHED);
+            event.setPublishedOn(LocalDateTime.now());
+
+        } else if (updateStateAction == EventStateAction.REJECT_EVENT) {
+            if (state == EventState.PUBLISHED) {
+                throw new ConflictException("Published event could not be rejected");
+            }
+            event.setState(EventState.REJECTED);
+
+        } else {
+            throw new NoSuchElementException("Unknown state action");
+        }
+
+       /* if (updateStateAction != null) {
 
             if (updateStateAction == EventStateAction.PUBLISH_EVENT) {
                 if (state != EventState.WAITING) {
@@ -163,6 +200,7 @@ Event updatedEvent = updateEventByAdmin(event, req);
                 throw new NoSuchElementException("Unknown state action");
             }
         }
+        */
 
         if (update.getTitle() != null) {
             event.setTitle(update.getTitle());
@@ -189,7 +227,7 @@ Event updatedEvent = updateEventByAdmin(event, req);
 
         if (update.getLocation() != null) {
             event.setLat(update.getLocation().getLat());
-            event.setLon(update.getLocation().getLat());
+            event.setLon(update.getLocation().getLon());
         }
 
         if (update.getPaid() != null) {

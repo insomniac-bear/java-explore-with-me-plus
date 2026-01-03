@@ -17,7 +17,6 @@ import java.util.Set;
 @Builder
 public class NewCompilationDto {
 
-    @NotEmpty
     private Set<Long> events;
 
     private Boolean pinned = false;

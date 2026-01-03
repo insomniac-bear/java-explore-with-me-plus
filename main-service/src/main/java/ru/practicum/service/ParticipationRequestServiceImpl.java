@@ -83,7 +83,9 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
             event.setConfirmedRequests(event.getConfirmedRequests() + 1);
             eventRepository.save(event);
         }
-
+        log.info("Event {} details: state={}, requestModeration={}, participantLimit={}, confirmedRequests={}",
+                eventId, event.getState(), event.getRequestModeration(),
+                event.getParticipantLimit(), event.getConfirmedRequests());
         return requestMapper.mapToDto(requestRepository.save(request));
     }
 

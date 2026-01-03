@@ -81,10 +81,12 @@ public class CompilationServiceImpl implements CompilationService {
                     .stream()
                     .map(mapper::toDto)
                     .collect(Collectors.toList());
+        } else {
+            return repository.findByPinned(pinned, pageable)
+                    .stream()
+                    .map(mapper::toDto)
+                    .collect(Collectors.toList());
         }
-        return repository.findAll(pinned, pageable).stream()
-                .map(mapper::toDto)
-                .collect(Collectors.toList());
     }
 
     @Override
