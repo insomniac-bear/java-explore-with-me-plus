@@ -2,6 +2,7 @@ package ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.CategoryDto;
@@ -10,7 +11,9 @@ import ru.practicum.model.Category;
 import ru.practicum.repository.CategoryRepository;
 import ru.practicum.repository.EventRepository;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +21,6 @@ import java.util.NoSuchElementException;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository repository;
-    private final EventRepository eventRepository;
     private final CategoryMapper mapper;
 
     @Override
@@ -47,5 +49,19 @@ public class CategoryServiceImpl implements CategoryService {
         } catch (DataIntegrityViolationException e) {
             throw e;
         }
+    }
+
+    @Override
+    public List<CategoryDto> findAll(Pageable pageable) {
+        return repository.findAll().stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public CategoryDto findById(Long catId) {
+        Category category = repository.findById(catId)
+                .orElseThrow(() -> new NoSuchElementException("Category with id=" + catId + " was not found"));
+        return mapper.toDto(category);
     }
 }

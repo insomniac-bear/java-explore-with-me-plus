@@ -31,5 +31,5 @@ public class AdminCategoryController {
                               @Valid @RequestBody CategoryDto dto) {
         return service.update(catId, dto);
     }
-    @GetMapping()
+
 }

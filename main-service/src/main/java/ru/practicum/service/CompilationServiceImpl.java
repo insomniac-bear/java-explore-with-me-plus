@@ -1,6 +1,7 @@
 package ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.mapper.CompilationMapper;
@@ -12,6 +13,7 @@ import ru.practicum.dto.UpdateCompilationRequest;
 import ru.practicum.model.Event;
 import ru.practicum.repository.EventRepository;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -70,5 +72,15 @@ public class CompilationServiceImpl implements CompilationService {
             );
 
         return mapper.toDto(repository.save(comp));
+    }
+
+    @Override
+    public List<CompilationDto> findAll(Boolean pinned, Pageable pageable) {
+        return List.of();
+    }
+
+    @Override
+    public CompilationDto findById(Long compId) {
+        return null;
     }
 }
