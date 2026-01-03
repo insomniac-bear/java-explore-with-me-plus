@@ -76,11 +76,22 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public List<CompilationDto> findAll(Boolean pinned, Pageable pageable) {
-        return List.of();
+        if (pinned == null) {
+            return repository.findAll(pageable)
+                    .stream()
+                    .map(mapper::toDto)
+                    .collect(Collectors.toList());
+        }
+        return repository.findAll(pinned, pageable).stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public CompilationDto findById(Long compId) {
-        return null;
+        Compilation comp = repository.findById(compId)
+                .orElseThrow(() -> new NoSuchElementException(
+                        "Compilation with id=" + compId + " was not found"));
+        return mapper.toDto(comp);
     }
 }
