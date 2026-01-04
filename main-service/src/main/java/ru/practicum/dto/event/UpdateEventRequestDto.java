@@ -26,4 +26,5 @@ public class UpdateEventRequestDto {
     private Integer participantLimit;
     private Boolean requestModeration;
     private EventState stateAction;
+
 }
