@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,11 +37,13 @@ public class NewEventRequestDto {
     private String title;
 
     @NotNull
-    private Boolean paid;
+    @Builder.Default
+    private Boolean paid = false;
 
-    @Positive
-    private Integer participantLimit;
+    @PositiveOrZero
+    @Builder.Default
+    private Integer participantLimit = 0;
 
     @NotNull
-    private Boolean requestModeration;
+    private Boolean requestModeration = true;
 }

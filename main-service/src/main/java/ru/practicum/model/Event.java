@@ -1,10 +1,10 @@
 package ru.practicum.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.validator.constraints.Length;
 import ru.practicum.util.EventState;
 
 import java.time.LocalDateTime;
@@ -24,18 +24,22 @@ public class Event {
 
     @Column
     @NotBlank
+    @Length(min = 3, max = 120)
     private String title;
 
     @Column
     @NotBlank
+    @Length(min = 20)
     private String description;
 
     @Column
     @NotBlank
+    @Length(min = 20, max = 2000)
     private String annotation;
 
     @Column(name = "event_date")
     @NotNull
+    @Future
     private LocalDateTime eventDate;
 
     @Column(name = "created_on")

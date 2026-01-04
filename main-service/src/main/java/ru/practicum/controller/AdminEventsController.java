@@ -1,5 +1,6 @@
 package ru.practicum.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -48,7 +49,7 @@ public class AdminEventsController {
     @PatchMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
     public AdminEventResponseDto update(@PathVariable Long eventId,
-                                   UpdateEventAdminRequest req) {
+                                   @RequestBody @Valid UpdateEventAdminRequest req) {
         log.info("Got request for Admin: update event {} with data {}", eventId, req.toString() );
         return eventService.updateAdminEvent(eventId, req);
     }

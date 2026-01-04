@@ -82,6 +82,10 @@ public class EventServiceImpl implements EventService {
             throw new ConflictException("Cannot update published event");
         }
 
+        if (event.getEventDate().minusHours(2L).isBefore(LocalDateTime.now())) {
+            throw new ConflictException("Event could be changed only 2 hours before now");
+        }
+
         checkPermission(event, user);
         Category category = null;
 
