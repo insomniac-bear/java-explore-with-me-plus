@@ -3,6 +3,7 @@ package ru.practicum.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import ru.practicum.util.EventState;
 
@@ -44,6 +45,7 @@ public class Event {
     private Boolean paid;
 
     @Column(name = "participant_limit", columnDefinition = "INT DEFAULT 0")
+    @PositiveOrZero
     private Integer participantLimit;
 
     @Column(name = "request_moderation", columnDefinition = "BOOLEAN DEFAULT FALSE")

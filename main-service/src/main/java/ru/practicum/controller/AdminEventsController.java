@@ -9,8 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.AdminEventResponseDto;
 import ru.practicum.dto.UpdateEventAdminRequest;
-import ru.practicum.model.AdminEventParam;
-import ru.practicum.service.EventService;
+import ru.practicum.service.event.EventService;
 import ru.practicum.util.EventState;
 import ru.practicum.util.Patterns;
 

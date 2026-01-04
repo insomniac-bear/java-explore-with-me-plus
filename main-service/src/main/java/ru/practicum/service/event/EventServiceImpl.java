@@ -1,8 +1,7 @@
-package ru.practicum.service;
+package ru.practicum.service.event;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,6 +77,11 @@ public class EventServiceImpl implements EventService {
     public EventResponseDto update(Long userId, Long eventId, UpdateEventRequestDto req) {
         User user = findUser(userId);
         Event event = findEvent(eventId);
+
+        if (event.getState() == EventState.PUBLISHED) {
+            throw new ConflictException("Cannot update published event");
+        }
+
         checkPermission(event, user);
         Category category = null;
 

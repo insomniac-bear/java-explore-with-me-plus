@@ -1,4 +1,4 @@
-package ru.practicum.service;
+package ru.practicum.service.request;
 
 import ru.practicum.dto.EventRequestStatusUpdateRequest;
 import ru.practicum.dto.EventRequestStatusUpdateResult;

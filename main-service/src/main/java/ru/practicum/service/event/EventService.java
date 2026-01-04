@@ -1,9 +1,7 @@
-package ru.practicum.service;
+package ru.practicum.service.event;
 
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import ru.practicum.dto.*;
-import ru.practicum.model.AdminEventParam;
 import ru.practicum.util.EventState;
 
 import java.time.LocalDateTime;
