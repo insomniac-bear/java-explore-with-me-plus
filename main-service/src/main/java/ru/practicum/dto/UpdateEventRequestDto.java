@@ -3,7 +3,6 @@ package ru.practicum.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import ru.practicum.util.EventState;
-import ru.practicum.util.EventStateAction;
 
 import java.time.LocalDateTime;
 
@@ -21,5 +20,5 @@ public class UpdateEventRequestDto {
     private Boolean paid;
     private Integer participantLimit;
     private Boolean requestModeration;
-    private EventStateAction stateAction;
+    private EventState stateAction;
 }
