@@ -121,13 +121,13 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
             eventRepository.save(event);
         }
 
-        request.setStatus(ParticipationRequestStatus.CANCELLED);
+        request.setStatus(ParticipationRequestStatus.CANCELED);
 
         return requestMapper.mapToDto(requestRepository.save(request));
     }
 
     @Override
-    public List<ParticipationRequestDto> getUsersRequests(Long userId, Long eventId) {
+    public List<ParticipationRequestDto> getUsersRequestsForUserEvent(Long userId, Long eventId) {
         log.info("Service get requests for user {} and event {}", userId, eventId);
 
         Event event = eventRepository.findById(eventId)

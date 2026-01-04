@@ -59,7 +59,7 @@ public class UsersEventsController {
     public List<ParticipationRequestDto> getRequests(@PathVariable Long userId,
                                                      @PathVariable Long eventId) {
         log.info("Получение информации о запросах на участие в событии текущего пользователя");
-        return requestService.getUsersRequests(userId, eventId);
+        return requestService.getUsersRequestsForUserEvent(userId, eventId);
     }
 
     @PatchMapping("/{eventId}/requests")
