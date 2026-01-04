@@ -28,7 +28,7 @@ public class ParticipationRequest {
     private Event event;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "requester_id", nullable = false)
     private User requester;
 
     @Enumerated(EnumType.STRING)

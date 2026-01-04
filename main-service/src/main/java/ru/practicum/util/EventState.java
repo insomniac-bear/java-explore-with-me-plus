@@ -1,5 +1,5 @@
 package ru.practicum.util;
 
 public enum EventState {
-    WAITING, PUBLISHED, REJECTED
+    WAITING, PUBLISHED, CANCELED, REJECTED
 }

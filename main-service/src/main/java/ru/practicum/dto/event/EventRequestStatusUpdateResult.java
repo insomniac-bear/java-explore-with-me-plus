@@ -1,6 +1,7 @@
-package ru.practicum.dto;
+package ru.practicum.dto.event;
 
 import lombok.*;
+import ru.practicum.dto.request.ParticipationRequestDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 public class EventRequestStatusUpdateResult {
 
     @Builder.Default

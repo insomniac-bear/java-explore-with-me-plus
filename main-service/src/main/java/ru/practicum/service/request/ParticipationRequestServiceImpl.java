@@ -1,13 +1,13 @@
-package ru.practicum.service;
+package ru.practicum.service.request;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
-import ru.practicum.dto.EventRequestStatusUpdateRequest;
-import ru.practicum.dto.EventRequestStatusUpdateResult;
-import ru.practicum.dto.ParticipationRequestDto;
+import ru.practicum.dto.event.EventRequestStatusUpdateRequest;
+import ru.practicum.dto.event.EventRequestStatusUpdateResult;
+import ru.practicum.dto.request.ParticipationRequestDto;
 import ru.practicum.error.ConflictException;
 import ru.practicum.mapper.ParticipationRequestMapper;
 import ru.practicum.model.Event;
@@ -83,12 +83,14 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
             event.setConfirmedRequests(event.getConfirmedRequests() + 1);
             eventRepository.save(event);
         }
-
+        log.info("Event {} details: state={}, requestModeration={}, participantLimit={}, confirmedRequests={}",
+                eventId, event.getState(), event.getRequestModeration(),
+                event.getParticipantLimit(), event.getConfirmedRequests());
         return requestMapper.mapToDto(requestRepository.save(request));
     }
 
     @Override
-    public List<ParticipationRequestDto> getOtherUsersRequests(Long userId) {
+    public List<ParticipationRequestDto> getOtherUsersEventsRequests(Long userId) {
         log.info("Service get requests for user {}", userId);
         if (!userRepository.existsById(userId)) {
             log.info("User {} does not exist", userId);
@@ -119,9 +121,26 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
             eventRepository.save(event);
         }
 
-        request.setStatus(ParticipationRequestStatus.CANCELLED);
+        request.setStatus(ParticipationRequestStatus.CANCELED);
 
         return requestMapper.mapToDto(requestRepository.save(request));
+    }
+
+    @Override
+    public List<ParticipationRequestDto> getUsersRequestsForUserEvent(Long userId, Long eventId) {
+        log.info("Service get requests for user {} and event {}", userId, eventId);
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NoSuchElementException("Event with id " + eventId + " does not exist"));
+
+        if (event.getInitiator().getId() != userId) {
+            throw new ResourceAccessException("Запросы может просматривать только инициатор события");
+        }
+
+        return requestRepository.findAllByEventId(eventId)
+                .stream()
+                .map(requestMapper::mapToDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional

@@ -1,22 +1,15 @@
-package ru.practicum.dto;
+package ru.practicum.dto.user;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 @Data
-@Builder
-public class UserDto {
+public class UserShortDto {
 
-    private Long id;
-
-    @Email
-    @Length(min = 6, max = 255)
     @NotNull
-    private String email;
+    private Long id;
 
     @Length(min = 2, max = 250)
     @NotBlank
