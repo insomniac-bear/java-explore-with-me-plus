@@ -6,7 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.dto.*;
+import ru.practicum.dto.event.*;
+import ru.practicum.dto.request.ParticipationRequestDto;
 import ru.practicum.service.event.EventService;
 import ru.practicum.service.request.ParticipationRequestService;
 
@@ -29,7 +30,8 @@ public class UsersEventsController {
 
     @GetMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public EventResponseDto get(@PathVariable Long userId, @PathVariable Long eventId) {
+    public EventResponseDto get(@PathVariable Long userId,
+                                @PathVariable Long eventId) {
         log.info("GET /users/{}/events/{} - запрос на получение события", userId, eventId);
         return service.get(userId, eventId);
     }
@@ -54,7 +56,8 @@ public class UsersEventsController {
 
     @GetMapping("/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
-    public List<ParticipationRequestDto> getRequests(@PathVariable Long userId, Long eventId) {
+    public List<ParticipationRequestDto> getRequests(@PathVariable Long userId,
+                                                     @PathVariable Long eventId) {
         log.info("Получение информации о запросах на участие в событии текущего пользователя");
         return requestService.getUsersRequests(userId, eventId);
     }

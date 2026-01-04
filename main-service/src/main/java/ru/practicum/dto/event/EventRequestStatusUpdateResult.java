@@ -1,6 +1,7 @@
-package ru.practicum.dto;
+package ru.practicum.dto.event;
 
 import lombok.*;
+import ru.practicum.dto.request.ParticipationRequestDto;
 
 import java.util.ArrayList;
 import java.util.List;

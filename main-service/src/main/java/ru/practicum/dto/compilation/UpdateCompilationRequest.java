@@ -1,12 +1,9 @@
-package ru.practicum.dto;
+package ru.practicum.dto.compilation;
 
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import jakarta.validation.constraints.NotBlank;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
@@ -15,13 +12,12 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class NewCompilationDto {
+public class UpdateCompilationRequest {
 
     private Set<Long> events;
 
-    private Boolean pinned = false;
+    private Boolean pinned;
 
-    @NotBlank
     @Size(max = 50)
     private String title;
 }

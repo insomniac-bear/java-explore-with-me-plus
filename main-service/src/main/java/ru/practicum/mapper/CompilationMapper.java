@@ -2,7 +2,7 @@ package ru.practicum.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.practicum.dto.CompilationDto;
+import ru.practicum.dto.compilation.CompilationDto;
 import ru.practicum.model.Compilation;
 
 @Mapper(componentModel = "spring", uses = EventMapper.class)

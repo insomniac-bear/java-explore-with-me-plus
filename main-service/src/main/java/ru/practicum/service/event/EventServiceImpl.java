@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
-import ru.practicum.dto.*;
+import ru.practicum.dto.event.*;
 import ru.practicum.error.ConflictException;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.model.Category;

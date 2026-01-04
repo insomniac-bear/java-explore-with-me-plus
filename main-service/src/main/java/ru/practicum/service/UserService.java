@@ -1,8 +1,8 @@
 package ru.practicum.service;
 
 import org.springframework.data.domain.Pageable;
-import ru.practicum.dto.NewUserRequestDto;
-import ru.practicum.dto.UserDto;
+import ru.practicum.dto.user.NewUserRequestDto;
+import ru.practicum.dto.user.UserDto;
 
 import java.util.List;
 

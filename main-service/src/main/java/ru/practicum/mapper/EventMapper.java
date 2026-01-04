@@ -1,7 +1,7 @@
 package ru.practicum.mapper;
 
 import org.mapstruct.*;
-import ru.practicum.dto.*;
+import ru.practicum.dto.event.*;
 import ru.practicum.model.Category;
 import ru.practicum.model.Event;
 import ru.practicum.model.User;

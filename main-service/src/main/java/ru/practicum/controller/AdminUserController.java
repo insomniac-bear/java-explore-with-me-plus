@@ -7,8 +7,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.service.UserService;
-import ru.practicum.dto.NewUserRequestDto;
-import ru.practicum.dto.UserDto;
+import ru.practicum.dto.user.NewUserRequestDto;
+import ru.practicum.dto.user.UserDto;
 
 import java.util.List;
 
