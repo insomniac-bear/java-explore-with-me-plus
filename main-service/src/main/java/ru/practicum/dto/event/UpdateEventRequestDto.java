@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import ru.practicum.util.EventState;
-import ru.practicum.util.EventStateAction;
 
 import java.time.LocalDateTime;
 
