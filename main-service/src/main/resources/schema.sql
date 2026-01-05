@@ -27,13 +27,13 @@ CREATE TABLE IF NOT EXISTS events (
     request_moderation BOOLEAN DEFAULT FALSE,
     lat FLOAT NOT NULL,
     lon FLOAT NOT NULL,
-    state VARCHAR(20) DEFAULT 'WAITING',
+    state VARCHAR(20) DEFAULT 'SEND_TO_REVIEW',
     published_on TIMESTAMP,
     created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     category_id BIGINT REFERENCES categories,
     user_id BIGINT REFERENCES users ON DELETE CASCADE,
     confirmed_requests INTEGER,
-    CONSTRAINT chk_status CHECK (state IN ('WAITING', 'PUBLISHED', 'REJECTED', 'CANCELLED'))
+    CONSTRAINT chk_status CHECK (state IN ('SEND_TO_REVIEW', 'PUBLISH_EVENT', 'REJECT_EVENT', 'CANCEL_REVIEW'))
 );
 
 CREATE TABLE IF NOT EXISTS compilations (
