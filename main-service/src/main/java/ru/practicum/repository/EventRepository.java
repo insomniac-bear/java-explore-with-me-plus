@@ -7,7 +7,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.practicum.model.Event;
-import ru.practicum.util.EventState;
+import ru.practicum.util.EventStateAction;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,7 +26,7 @@ public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPre
             """)
     List<Event> findAdminEvents(
             @Param("users") List<Long> users,
-            @Param("states") List<EventState> states,
+            @Param("states") List<EventStateAction> states,
             @Param("categories") List<Long> categories,
             @Param("rangeStart") LocalDateTime rangeStart,
             @Param("rangeEnd") LocalDateTime rangeEnd,

@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import ru.practicum.dto.category.CategoryDto;
 import ru.practicum.dto.user.UserShortDto;
-import ru.practicum.util.EventState;
+import ru.practicum.util.EventStateAction;
 
 import java.time.LocalDateTime;
 
@@ -44,7 +44,7 @@ public class EventResponseDto {
 
     private Boolean requestModeration;
 
-    private EventState state;
+    private EventStateAction state;
 
     private String title;
 

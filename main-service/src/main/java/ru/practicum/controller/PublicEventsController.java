@@ -29,7 +29,7 @@ public class PublicEventsController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ShortEventResponseDto> findAll(@ModelAttribute EventSearchCriteria criteria, HttpServletRequest req) {
-        List<ShortEventResponseDto> res = service.getAll(criteria);
+        List<ShortEventResponseDto> res = service.find(criteria);
         saveHit(req);
         return res;
     }

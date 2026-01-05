@@ -19,7 +19,6 @@ import ru.practicum.model.User;
 import ru.practicum.repository.CategoryRepository;
 import ru.practicum.repository.EventRepository;
 import ru.practicum.repository.UserRepository;
-import ru.practicum.util.EventState;
 import ru.practicum.util.EventStateAction;
 
 import java.time.LocalDateTime;
@@ -85,7 +84,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<ShortEventResponseDto> getAll(EventSearchCriteria criteria) {
+    public List<ShortEventResponseDto> find(EventSearchCriteria criteria) {
         BooleanBuilder predicate = new BooleanBuilder();
 
         if (criteria.hasCategories()) {
@@ -129,7 +128,7 @@ public class EventServiceImpl implements EventService {
         User user = findUser(userId);
         Event event = findEvent(eventId);
 
-        if (event.getState() == EventState.PUBLISHED) {
+        if (event.getState() == EventStateAction.PUBLISH_EVENT) {
             throw new ConflictException("Cannot update published event");
         }
 
@@ -156,7 +155,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<AdminEventResponseDto> findAdminEvents(
             List<Long> users,
-            List<EventState> states,
+            List<EventStateAction> states,
             List<Long> categories,
             LocalDateTime rangeStart,
             LocalDateTime rangeEnd,
@@ -212,54 +211,30 @@ public class EventServiceImpl implements EventService {
             event.setCategory(category);
         }
 
-        EventState state = event.getState();
+        EventStateAction state = event.getState();
         EventStateAction updateStateAction = update.getStateAction();
         if (updateStateAction == null) {
             updateStateAction = EventStateAction.PUBLISH_EVENT;
         }
         if (updateStateAction == EventStateAction.PUBLISH_EVENT) {
-            if (state != EventState.WAITING) {
+            if (state != EventStateAction.SEND_TO_REVIEW) {
                 throw new ConflictException("Only events with waiting status could be published");
             }
             if (event.getEventDate().minusHours(1L).isBefore(LocalDateTime.now())) {
                 throw new ConflictException("Event could be changed only one hour before now");
             }
-            event.setState(EventState.PUBLISHED);
+            event.setState(EventStateAction.PUBLISH_EVENT);
             event.setPublishedOn(LocalDateTime.now());
 
         } else if (updateStateAction == EventStateAction.REJECT_EVENT) {
-            if (state == EventState.PUBLISHED) {
+            if (state == EventStateAction.PUBLISH_EVENT) {
                 throw new ConflictException("Published event could not be rejected");
             }
-            event.setState(EventState.REJECTED);
+            event.setState(EventStateAction.REJECT_EVENT);
 
         } else {
             throw new NoSuchElementException("Unknown state action");
         }
-
-       /* if (updateStateAction != null) {
-
-            if (updateStateAction == EventStateAction.PUBLISH_EVENT) {
-                if (state != EventState.WAITING) {
-                    throw new ConflictException("Only events with waiting status could be published");
-                }
-                if (event.getEventDate().minusHours(1L).isBefore(LocalDateTime.now())) {
-                    throw new ConflictException("Event could be changed only one hour before now");
-                }
-                event.setState(EventState.PUBLISHED);
-                event.setPublishedOn(LocalDateTime.now());
-
-            } else if (updateStateAction == EventStateAction.REJECT_EVENT) {
-                if (state == EventState.PUBLISHED) {
-                    throw new ConflictException("Published event could not be rejected");
-                }
-                event.setState(EventState.REJECTED);
-
-            } else {
-                throw new NoSuchElementException("Unknown state action");
-            }
-        }
-        */
 
         if (update.getTitle() != null) {
             event.setTitle(update.getTitle());

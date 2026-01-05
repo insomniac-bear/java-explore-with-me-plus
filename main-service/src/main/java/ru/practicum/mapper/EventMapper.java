@@ -13,7 +13,7 @@ public interface EventMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "lat", source = "newEventRequest.location.lat")
     @Mapping(target = "lon", source = "newEventRequest.location.lon")
-    @Mapping(target = "state", expression = "java(ru.practicum.util.EventState.WAITING)")
+    @Mapping(target = "state", expression = "java(ru.practicum.util.EventStateAction.SEND_TO_REVIEW)")
     @Mapping(target = "createdOn", expression = "java(java.time.LocalDateTime.now())")
     @Mapping(target = "category", source = "category")
     @Mapping(target = "initiator", source = "user")

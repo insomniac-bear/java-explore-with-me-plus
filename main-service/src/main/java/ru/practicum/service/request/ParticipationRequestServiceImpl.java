@@ -16,7 +16,7 @@ import ru.practicum.model.User;
 import ru.practicum.repository.EventRepository;
 import ru.practicum.repository.ParticipationRequestRepository;
 import ru.practicum.repository.UserRepository;
-import ru.practicum.util.EventState;
+import ru.practicum.util.EventStateAction;
 import ru.practicum.util.ParticipationRequestStatus;
 
 import java.sql.Timestamp;
@@ -61,7 +61,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
             throw new ConflictException("Request from user " + userId + " for event " + eventId + " already exists");
         }
 
-        if (event.getState() != EventState.PUBLISHED) {
+        if (event.getState() != EventStateAction.PUBLISH_EVENT) {
             throw new ConflictException("Event " + eventId + " is not published");
         }
 
