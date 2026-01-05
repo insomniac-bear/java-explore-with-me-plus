@@ -1,7 +1,12 @@
 package ru.practicum.service.event;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +16,7 @@ import ru.practicum.error.ConflictException;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.model.Category;
 import ru.practicum.model.Event;
+import ru.practicum.model.QEvent;
 import ru.practicum.model.User;
 import ru.practicum.repository.CategoryRepository;
 import ru.practicum.repository.EventRepository;
@@ -52,6 +58,14 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public ShortEventResponseDto get(Long eventId) {
+        Event event = findEvent(eventId);
+        log.info("Найдено событие {}", event);
+
+        return mapper.eventToShortEventResponseDto(event);
+    }
+
+    @Override
     public EventResponseDto get(Long userId, Long eventId) {
         User user = findUser(userId);
         Event event = findEvent(eventId);
@@ -69,6 +83,45 @@ public class EventServiceImpl implements EventService {
         return eventRepository.findAllByInitiatorId(userId, pageable)
                 .stream()
                 .map((event) -> mapper.eventToShortEventResponseDto(event, user))
+                .toList();
+    }
+
+    @Override
+    public List<ShortEventResponseDto> getAll(EventSearchCriteria criteria) {
+        BooleanBuilder predicate = new BooleanBuilder();
+
+        if (criteria.hasCategories()) {
+            predicate.and(QEvent.event.category.id.in(criteria.getCategories()));
+        }
+
+        if (criteria.hasText()) {
+            predicate.and(QEvent.event.annotation.contains(criteria.getText()).or(QEvent.event.description.contains(criteria.getText())));
+        }
+
+        if (criteria.hasPaid()) {
+            predicate.and(QEvent.event.paid.eq(criteria.getPaid()));
+        }
+
+        if (criteria.hasRangeStart()) {
+            predicate.and(QEvent.event.eventDate.goe(criteria.getRangeStart()));
+        }
+
+        if (criteria.hasRangeEnd()) {
+            predicate.and(QEvent.event.eventDate.loe(criteria.getRangeEnd()));
+        }
+
+        if (criteria.isOnlyAvailable()) {
+            predicate.and(QEvent.event.participantLimit.eq(0)
+                    .or(QEvent.event.participantLimit.gt(QEvent.event.confirmedRequests)));
+        }
+
+        Pageable pageable = PageRequest.of(criteria.getFrom() / criteria.getSize(), criteria.getSize(), criteria.getSort());
+
+        Page<Event> events = eventRepository.findAll(predicate, pageable);
+        log.info("Найдены события: {}", events);
+
+        return  events.stream()
+                .map(mapper::eventToShortEventResponseDto)
                 .toList();
     }
 

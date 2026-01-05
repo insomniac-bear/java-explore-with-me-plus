@@ -35,6 +35,12 @@ public interface EventMapper {
     @Mapping(target = "id", source = "event.id")
     @Mapping(target = "location.lat", source = "event.lat")
     @Mapping(target = "location.lon", source = "event.lon")
+    @Mapping(target = "initiator", source = "event.initiator")
+    ShortEventResponseDto eventToShortEventResponseDto(Event event);
+
+    @Mapping(target = "id", source = "event.id")
+    @Mapping(target = "location.lat", source = "event.lat")
+    @Mapping(target = "location.lon", source = "event.lon")
     @Mapping(target = "initiator", source = "user")
     @Mapping(target = "initiator.id", source = "user.id")
     @Mapping(target = "initiator.name", source = "user.name")

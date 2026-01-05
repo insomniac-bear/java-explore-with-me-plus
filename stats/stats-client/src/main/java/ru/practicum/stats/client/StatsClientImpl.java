@@ -18,7 +18,7 @@ public class StatsClientImpl implements StatsClient {
 
     private final RestClient restClient;
 
-    public StatsClientImpl(@Value("${stats-server.url}") String serverUrl) {
+    public StatsClientImpl(@Value("${server.url:http://localhost:9090}") String serverUrl) {
         this.restClient = RestClient.builder()
                 .baseUrl(serverUrl)
                 .build();
