@@ -36,8 +36,7 @@ public class AdminEventsController {
             @RequestParam(required = false) @DateTimeFormat(pattern = Patterns.TIMESTAMP_PATTERN)
             LocalDateTime rangeEnd,
             @RequestParam(defaultValue = "0") Integer from,
-            @RequestParam(defaultValue = "10") Integer size)
-    {
+            @RequestParam(defaultValue = "10") Integer size) {
         log.info("Search events with params: users={}, states={}, categories={}, rangeStart={}, rangeEnd={}, from={}, size={}",
                 users, states, categories, rangeStart, rangeEnd, from, size);
         log.info("Got request for Admin: search events");
@@ -50,7 +49,7 @@ public class AdminEventsController {
     @ResponseStatus(HttpStatus.OK)
     public AdminEventResponseDto update(@PathVariable Long eventId,
                                    @RequestBody @Valid UpdateEventAdminRequest req) {
-        log.info("Got request for Admin: update event {} with data {}", eventId, req.toString() );
+        log.info("Got request for Admin: update event {} with data {}", eventId, req.toString());
         return eventService.updateAdminEvent(eventId, req);
     }
 }
