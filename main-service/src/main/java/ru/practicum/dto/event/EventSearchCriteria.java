@@ -11,7 +11,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Objects;
 
 import static ru.practicum.util.Patterns.EVENTS_SORT_PATTERN;
 import static ru.practicum.util.Patterns.TIMESTAMP_PATTERN;

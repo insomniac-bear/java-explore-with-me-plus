@@ -3,7 +3,6 @@ package ru.practicum.service.event;
 import org.springframework.data.domain.Pageable;
 import ru.practicum.dto.event.*;
 import ru.practicum.util.EventState;
-import ru.practicum.util.EventStateAction;
 
 import java.time.LocalDateTime;
 import java.util.List;
