@@ -2,6 +2,7 @@ package ru.practicum.service.event;
 
 import org.springframework.data.domain.Pageable;
 import ru.practicum.dto.event.*;
+import ru.practicum.util.EventState;
 import ru.practicum.util.EventStateAction;
 
 import java.time.LocalDateTime;
@@ -11,7 +12,7 @@ public interface EventService {
 
     EventResponseDto create(Long userId, NewEventRequestDto req);
 
-    List<ShortEventResponseDto> find(EventSearchCriteria criteria);
+    List<ShortEventResponseDto> find(EventSearchCriteria criteria) throws Exception;
 
     List<ShortEventResponseDto> getAll(Long userId, Pageable pageable);
 
@@ -23,7 +24,7 @@ public interface EventService {
 
     AdminEventResponseDto updateAdminEvent(Long eventId, UpdateEventAdminRequest req);
 
-    List<AdminEventResponseDto> findAdminEvents(List<Long> users, List<EventStateAction> states,
+    List<AdminEventResponseDto> findAdminEvents(List<Long> users, List<EventState> states,
                                                 List<Long> categories, LocalDateTime rangeStart,
                                                 LocalDateTime rangeEnd, Pageable pageable);
 }

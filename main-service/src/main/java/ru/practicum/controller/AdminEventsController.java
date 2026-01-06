@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.event.AdminEventResponseDto;
 import ru.practicum.dto.event.UpdateEventAdminRequest;
 import ru.practicum.service.event.EventService;
-import ru.practicum.util.EventStateAction;
+import ru.practicum.util.EventState;
 import ru.practicum.util.Patterns;
 
 import java.time.LocalDateTime;
@@ -29,7 +29,7 @@ public class AdminEventsController {
     @ResponseStatus(HttpStatus.OK)
     public List<AdminEventResponseDto> findAll(
             @RequestParam(required = false) List<Long> users,
-            @RequestParam(required = false) List<EventStateAction> states,
+            @RequestParam(required = false) List<EventState> states,
             @RequestParam(required = false) List<Long> categories,
             @RequestParam(required = false) @DateTimeFormat(pattern = Patterns.TIMESTAMP_PATTERN)
             LocalDateTime rangeStart,

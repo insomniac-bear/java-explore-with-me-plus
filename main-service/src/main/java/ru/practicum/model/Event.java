@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
-import ru.practicum.util.EventStateAction;
+import ru.practicum.util.EventState;
 
 import java.time.LocalDateTime;
 
@@ -64,7 +64,7 @@ public class Event {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(20) DEFAULT WAITING")
-    private EventStateAction state;
+    private EventState state;
 
     @Column(name = "published_on")
     private LocalDateTime publishedOn;

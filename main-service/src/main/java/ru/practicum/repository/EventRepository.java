@@ -7,15 +7,18 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.practicum.model.Event;
-import ru.practicum.util.EventStateAction;
+import ru.practicum.util.EventState;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPredicateExecutor<Event> {
 
     List<Event> findAllByInitiatorId(Long userId, Pageable pageable);
+
+    Optional<Event> findByIdAndState(Long eventId, EventState stateAction);
 
     @Query("""
             SELECT e FROM Event e WHERE (:users IS NULL OR e.initiator.id IN :users)
@@ -26,7 +29,7 @@ public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPre
             """)
     List<Event> findAdminEvents(
             @Param("users") List<Long> users,
-            @Param("states") List<EventStateAction> states,
+            @Param("states") List<EventState> states,
             @Param("categories") List<Long> categories,
             @Param("rangeStart") LocalDateTime rangeStart,
             @Param("rangeEnd") LocalDateTime rangeEnd,

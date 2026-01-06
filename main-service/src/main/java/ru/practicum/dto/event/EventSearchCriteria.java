@@ -5,10 +5,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -20,6 +17,7 @@ import static ru.practicum.util.Patterns.EVENTS_SORT_PATTERN;
 import static ru.practicum.util.Patterns.TIMESTAMP_PATTERN;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -77,7 +75,10 @@ public class EventSearchCriteria {
     }
 
     public Sort getSort() {
-        return Sort.by(Objects.requireNonNullElse(sort, "title")).descending();
-
+        return switch (sort) {
+            case "EVENT_DATE" -> Sort.by("eventDate").descending();
+            case "VIEWS" -> Sort.by("views").descending();
+            case null, default -> Sort.by("title").descending();
+        };
     }
 }
