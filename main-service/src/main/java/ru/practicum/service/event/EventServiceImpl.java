@@ -61,7 +61,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public ShortEventResponseDto get(Long eventId) {
+    public EventResponseDto get(Long eventId) {
         Event event = eventRepository.findByIdAndState(eventId, EventState.PUBLISHED)
                 .orElseThrow(() -> {
                     return new NoSuchElementException("Event with id " + eventId + " notFound");
@@ -69,7 +69,7 @@ public class EventServiceImpl implements EventService {
         log.info("Найдено событие {}", event);
 
         Long views = getViews(eventId);
-        ShortEventResponseDto res = mapper.eventToShortEventResponseDto(event);
+        EventResponseDto res = mapper.eventToEventResponseDto(event, event.getInitiator());
         res.setViews(views);
 
         return res;

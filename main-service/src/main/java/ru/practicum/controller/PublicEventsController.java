@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.EndpointHitDto;
+import ru.practicum.dto.event.EventResponseDto;
 import ru.practicum.dto.event.EventSearchCriteria;
 import ru.practicum.dto.event.ShortEventResponseDto;
 import ru.practicum.service.event.EventService;
@@ -36,8 +37,8 @@ public class PublicEventsController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ShortEventResponseDto getEvent(@PathVariable Long id, HttpServletRequest req) {
-        ShortEventResponseDto res = service.get(id);
+    public EventResponseDto getEvent(@PathVariable Long id, HttpServletRequest req) {
+        EventResponseDto res = service.get(id);
         saveHit(req);
         return res;
     }
