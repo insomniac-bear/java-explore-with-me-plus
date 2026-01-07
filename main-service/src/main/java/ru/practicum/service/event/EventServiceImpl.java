@@ -301,9 +301,16 @@ public class EventServiceImpl implements EventService {
     }
 
     private Long getViews(Long eventId) {
-        List<String> gettingUris = new ArrayList<>();
-        gettingUris.add("/events/" + eventId);
-        return statsClient.getStats(LocalDateTime.now().minusYears(1), LocalDateTime.now(), gettingUris, true)
-                .stream().map(ViewStatsDto::getHits).reduce(0L, Long::sum);
+        try {
+            LocalDateTime end = LocalDateTime.now();
+            List<String> gettingUris = new ArrayList<>();
+            gettingUris.add("/events/" + eventId);
+            return statsClient.getStats(end.minusYears(1), end, gettingUris, true)
+                    .stream()
+                    .map(ViewStatsDto::getHits)
+                    .reduce(0L, Long::sum);
+        } catch (Exception e) {
+            return 0L;
+        }
     }
 }
