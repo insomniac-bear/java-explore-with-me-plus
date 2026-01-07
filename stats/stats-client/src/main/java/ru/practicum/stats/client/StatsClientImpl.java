@@ -12,6 +12,7 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class StatsClientImpl implements StatsClient {
 
     private final RestClient restClient;
     private final String serverUrl;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public StatsClientImpl(@Value("${server.url:http://localhost:9090}") String serverUrl) {
         this.restClient = RestClient.create();
@@ -50,8 +52,8 @@ public class StatsClientImpl implements StatsClient {
         String uriWithParams = UriComponentsBuilder.newInstance()
                 .uri(URI.create(serverUrl))
                 .path("/stats")
-                .queryParam("start", start)
-                .queryParam("end", end)
+                .queryParam("start", start.format(formatter))
+                .queryParam("end", end.format(formatter))
                 .queryParam("uris", uris)
                 .queryParam("unique", unique)
                 .toUriString();
