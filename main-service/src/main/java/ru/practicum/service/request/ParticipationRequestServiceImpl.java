@@ -133,7 +133,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NoSuchElementException("Event with id " + eventId + " does not exist"));
 
-        if (event.getInitiator().getId() != userId) {
+        if (!Objects.equals(event.getInitiator().getId(), userId)) {
             throw new ResourceAccessException("Запросы может просматривать только инициатор события");
         }
 
@@ -176,7 +176,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                 throw new ConflictException("Event " + eventId + " is full");
             }
 
-            Long numberOfFreeSlots = Math.min(requests.size(), event.getParticipantLimit() - alreadyConfirmed);
+            long numberOfFreeSlots = Math.min(requests.size(), event.getParticipantLimit() - alreadyConfirmed);
             for (int i = 0; i < requests.size(); i++) {
                 ParticipationRequest request = requests.get(i);
                 if (i < numberOfFreeSlots) {

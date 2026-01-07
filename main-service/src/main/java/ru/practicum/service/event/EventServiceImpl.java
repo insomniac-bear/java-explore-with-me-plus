@@ -1,24 +1,32 @@
 package ru.practicum.service.event;
 
+import com.querydsl.core.BooleanBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
+import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.dto.event.*;
 import ru.practicum.error.ConflictException;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.model.Category;
 import ru.practicum.model.Event;
+import ru.practicum.model.QEvent;
 import ru.practicum.model.User;
 import ru.practicum.repository.CategoryRepository;
 import ru.practicum.repository.EventRepository;
 import ru.practicum.repository.UserRepository;
 import ru.practicum.util.EventState;
 import ru.practicum.util.EventStateAction;
+import ru.practicum.stats.client.StatsClient;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -26,12 +34,13 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class EventServiceImpl implements EventService {
     private final EventMapper mapper;
     private final CategoryRepository categoryRepository;
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
+    private final StatsClient statsClient;
 
     @Override
     @Transactional
@@ -52,6 +61,21 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public EventResponseDto get(Long eventId) {
+        Event event = eventRepository.findByIdAndState(eventId, EventState.PUBLISHED)
+                .orElseThrow(() -> {
+                    return new NoSuchElementException("Event with id " + eventId + " notFound");
+                });
+        log.info("Найдено событие {}", event);
+
+        Long views = getViews(eventId);
+        EventResponseDto res = mapper.eventToEventResponseDto(event, event.getInitiator());
+        res.setViews(views);
+
+        return res;
+    }
+
+    @Override
     public EventResponseDto get(Long userId, Long eventId) {
         User user = findUser(userId);
         Event event = findEvent(eventId);
@@ -69,6 +93,47 @@ public class EventServiceImpl implements EventService {
         return eventRepository.findAllByInitiatorId(userId, pageable)
                 .stream()
                 .map((event) -> mapper.eventToShortEventResponseDto(event, user))
+                .toList();
+    }
+
+    @Override
+    public List<ShortEventResponseDto> find(EventSearchCriteria criteria) throws Exception {
+        BooleanBuilder predicate = new BooleanBuilder();
+
+        if (criteria.hasCategories()) {
+            predicate.and(QEvent.event.category.id.in(criteria.getCategories()));
+        }
+
+        if (criteria.hasText()) {
+            predicate.and(QEvent.event.annotation.contains(criteria.getText()).or(QEvent.event.description.contains(criteria.getText())));
+        }
+
+        if (criteria.hasPaid()) {
+            predicate.and(QEvent.event.paid.eq(criteria.getPaid()));
+        }
+
+        if (criteria.hasRangeStart()) {
+            predicate.and(QEvent.event.eventDate.goe(criteria.getRangeStart()));
+        }
+
+        if (criteria.hasRangeEnd()) {
+            if (criteria.hasRangeStart() && !criteria.getRangeEnd().isAfter(criteria.getRangeStart())) {
+                throw new BadRequestException("Invalid rangeEnd");
+            }
+            predicate.and(QEvent.event.eventDate.loe(criteria.getRangeEnd()));
+        }
+        if (criteria.isOnlyAvailable()) {
+            predicate.and(QEvent.event.participantLimit.eq(0)
+                    .or(QEvent.event.participantLimit.gt(QEvent.event.confirmedRequests)));
+        }
+
+        Pageable pageable = PageRequest.of(criteria.getFrom() / criteria.getSize(), criteria.getSize(), criteria.getSort());
+
+        Page<Event> events = eventRepository.findAll(predicate, pageable);
+        log.info("Найдены события: {}", events);
+
+        return  events.stream()
+                .map(mapper::eventToShortEventResponseDto)
                 .toList();
     }
 
@@ -97,6 +162,15 @@ public class EventServiceImpl implements EventService {
         }
 
         Event updatingEvent = mapper.updateEventField(event, req, category);
+
+        if (req.getStateAction() == EventStateAction.SEND_TO_REVIEW && updatingEvent.getState() != EventState.CANCELED) {
+            updatingEvent.setState(EventState.PENDING);
+        }
+
+        if (req.getStateAction() == EventStateAction.CANCEL_REVIEW) {
+            updatingEvent.setState(EventState.CANCELED);
+        }
+
         log.info("Сорбытие {} обновлено данными из запроса {}", updatingEvent, req);
 
         return mapper.eventToEventResponseDto(updatingEvent, user);
@@ -120,6 +194,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public AdminEventResponseDto updateAdminEvent(Long eventId, UpdateEventAdminRequest req) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NoSuchElementException("Event with id " + eventId + " not found"));
@@ -130,26 +205,6 @@ public class EventServiceImpl implements EventService {
         log.info("Updated event: {}", savedEvent);
 
         return mapper.toAdminEventFullDto(savedEvent);
-    }
-
-    private User findUser(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> {
-                    return new NoSuchElementException("User with id " + userId + " notFound");
-                });
-    }
-
-    private Event findEvent(Long eventId) {
-        return eventRepository.findById(eventId)
-                .orElseThrow(() -> {
-                    return new NoSuchElementException("Event with id " + eventId + " notFound");
-                });
-    }
-
-    private void checkPermission(Event event, User user) {
-        if (!event.getInitiator().equals(user)) {
-            throw new ResourceAccessException("Access to event " + event + " forbidden");
-        }
     }
 
     @Transactional
@@ -167,7 +222,7 @@ public class EventServiceImpl implements EventService {
             updateStateAction = EventStateAction.PUBLISH_EVENT;
         }
         if (updateStateAction == EventStateAction.PUBLISH_EVENT) {
-            if (state != EventState.WAITING) {
+            if (state != EventState.PENDING) {
                 throw new ConflictException("Only events with waiting status could be published");
             }
             if (event.getEventDate().minusHours(1L).isBefore(LocalDateTime.now())) {
@@ -185,30 +240,6 @@ public class EventServiceImpl implements EventService {
         } else {
             throw new NoSuchElementException("Unknown state action");
         }
-
-       /* if (updateStateAction != null) {
-
-            if (updateStateAction == EventStateAction.PUBLISH_EVENT) {
-                if (state != EventState.WAITING) {
-                    throw new ConflictException("Only events with waiting status could be published");
-                }
-                if (event.getEventDate().minusHours(1L).isBefore(LocalDateTime.now())) {
-                    throw new ConflictException("Event could be changed only one hour before now");
-                }
-                event.setState(EventState.PUBLISHED);
-                event.setPublishedOn(LocalDateTime.now());
-
-            } else if (updateStateAction == EventStateAction.REJECT_EVENT) {
-                if (state == EventState.PUBLISHED) {
-                    throw new ConflictException("Published event could not be rejected");
-                }
-                event.setState(EventState.REJECTED);
-
-            } else {
-                throw new NoSuchElementException("Unknown state action");
-            }
-        }
-        */
 
         if (update.getTitle() != null) {
             event.setTitle(update.getTitle());
@@ -247,5 +278,39 @@ public class EventServiceImpl implements EventService {
         }
 
         return event;
+    }
+
+    private User findUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    return new NoSuchElementException("User with id " + userId + " notFound");
+                });
+    }
+
+    private Event findEvent(Long eventId) {
+        return eventRepository.findById(eventId)
+                .orElseThrow(() -> {
+                    return new NoSuchElementException("Event with id " + eventId + " notFound");
+                });
+    }
+
+    private void checkPermission(Event event, User user) {
+        if (!event.getInitiator().equals(user)) {
+            throw new ResourceAccessException("Access to event " + event + " forbidden");
+        }
+    }
+
+    private Long getViews(Long eventId) {
+        try {
+            LocalDateTime end = LocalDateTime.now();
+            List<String> gettingUris = new ArrayList<>();
+            gettingUris.add("/events/" + eventId);
+            return statsClient.getStats(end.minusYears(1), end, gettingUris, true)
+                    .stream()
+                    .map(ViewStatsDto::getHits)
+                    .reduce(0L, Long::sum);
+        } catch (Exception e) {
+            return 0L;
+        }
     }
 }

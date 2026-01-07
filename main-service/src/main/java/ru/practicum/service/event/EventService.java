@@ -11,7 +11,11 @@ public interface EventService {
 
     EventResponseDto create(Long userId, NewEventRequestDto req);
 
+    List<ShortEventResponseDto> find(EventSearchCriteria criteria) throws Exception;
+
     List<ShortEventResponseDto> getAll(Long userId, Pageable pageable);
+
+    EventResponseDto get(Long eventId);
 
     EventResponseDto get(Long userId, Long eventId);
 

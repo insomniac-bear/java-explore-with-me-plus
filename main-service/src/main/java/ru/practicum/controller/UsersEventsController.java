@@ -50,7 +50,7 @@ public class UsersEventsController {
     public EventResponseDto update(@PathVariable Long userId,
                                    @PathVariable Long eventId,
                                    @Valid @RequestBody UpdateEventRequestDto req) {
-        log.info("GET /users/{}/events/{} - запрос на обновление события {}", userId, eventId, req);
+        log.info("PATCH /users/{}/events/{} - запрос на обновление события {}", userId, eventId, req);
         return service.update(userId, eventId, req);
     }
 

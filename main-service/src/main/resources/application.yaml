@@ -27,3 +27,4 @@ spring:
       orm.jpa.JpaTransactionManager: INFO
       transaction: INFO
       transaction.interceptor: TRACE
+      ru.practicum: DEBUG
