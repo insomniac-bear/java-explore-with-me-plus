@@ -22,6 +22,7 @@ public class PublicCompilationController {
     public List<CompilationDto> findAll(@RequestParam(required = false) Boolean pinned,
                                         @RequestParam(defaultValue = "0") int from,
                                         @RequestParam(defaultValue = "10") int size) {
+        log.info("Finding all compilations");
         return compilationService.findAll(pinned, PageRequest.of(from / size, size));
     }
 

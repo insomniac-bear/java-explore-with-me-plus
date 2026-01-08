@@ -23,14 +23,14 @@ public class AdminUserController {
     @ResponseStatus(HttpStatus.OK)
     public List<UserDto> getUsers(@RequestParam (required = false) List<Long> ids,
                                   @RequestParam (defaultValue = "0") int from,
-                                  @RequestParam(defaultValue = "10") int size
-    ) {
+                                  @RequestParam(defaultValue = "10") int size) {
+        log.info("Getting all users");
         return userService.getUsers(ids, PageRequest.of(from / size, size));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto createUser(@Valid @RequestBody NewUserRequestDto userRequestDto) {
+    public UserDto addUser(@Valid @RequestBody NewUserRequestDto userRequestDto) {
         log.info("Create new user {}", userRequestDto);
         return userService.addUser(userRequestDto);
     }

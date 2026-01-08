@@ -30,6 +30,7 @@ public class PublicEventsController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ShortEventResponseDto> findAll(@ModelAttribute EventSearchCriteria criteria, HttpServletRequest req) throws Exception {
+      log.info("Finding all events");
         List<ShortEventResponseDto> res = service.find(criteria);
         saveHit(req);
         return res;
@@ -38,6 +39,7 @@ public class PublicEventsController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EventResponseDto getEvent(@PathVariable Long id, HttpServletRequest req) {
+        log.info("Getting event {}", id);
         EventResponseDto res = service.get(id);
         saveHit(req);
         return res;
@@ -45,6 +47,7 @@ public class PublicEventsController {
 
     private void saveHit(HttpServletRequest request) {
         EndpointHitDto endpointHitDto = new EndpointHitDto();
+        log.info("Saving endpoint hit {}", endpointHitDto);
         endpointHitDto.setApp(MAIN_SERVICE);
         endpointHitDto.setUri(request.getRequestURI());
         endpointHitDto.setIp(request.getRemoteAddr());

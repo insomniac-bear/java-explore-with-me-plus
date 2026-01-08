@@ -56,7 +56,7 @@ public class UsersEventsController {
 
     @GetMapping("/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
-    public List<ParticipationRequestDto> getRequests(@PathVariable Long userId,
+    public List<ParticipationRequestDto> getUsersRequestsForUserEvent(@PathVariable Long userId,
                                                      @PathVariable Long eventId) {
         log.info("Получение информации о запросах на участие в событии текущего пользователя");
         return requestService.getUsersRequestsForUserEvent(userId, eventId);
@@ -64,7 +64,7 @@ public class UsersEventsController {
 
     @PatchMapping("/{eventId}/requests")
     @ResponseStatus(HttpStatus.OK)
-    public EventRequestStatusUpdateResult getRequests(@PathVariable Long userId,
+    public EventRequestStatusUpdateResult updateRequestStatus(@PathVariable Long userId,
                                                       @PathVariable Long eventId,
                                                       @RequestBody EventRequestStatusUpdateRequest req) {
         log.info("Новый статус для заявок на участие в событии {} пользователя {}",eventId, userId);

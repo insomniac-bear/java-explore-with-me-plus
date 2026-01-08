@@ -27,7 +27,7 @@ public class AdminEventsController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<AdminEventResponseDto> findAll(
+    public List<AdminEventResponseDto> findAdminEvents(
             @RequestParam(required = false) List<Long> users,
             @RequestParam(required = false) List<EventState> states,
             @RequestParam(required = false) List<Long> categories,
@@ -46,7 +46,7 @@ public class AdminEventsController {
 
     @PatchMapping("/{eventId}")
     @ResponseStatus(HttpStatus.OK)
-    public AdminEventResponseDto update(@PathVariable Long eventId,
+    public AdminEventResponseDto updateAdminEvent(@PathVariable Long eventId,
                                    @RequestBody @Valid UpdateEventAdminRequest req) {
         log.info("Got request for Admin: update event {} with data {}", eventId, req.toString());
         return eventService.updateAdminEvent(eventId, req);

@@ -27,7 +27,7 @@ public class ParticipationRequestController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ParticipationRequestDto> getRequests(@PathVariable Long userId) {
+    public List<ParticipationRequestDto> getOtherUsersEventsRequests(@PathVariable Long userId) {
         log.info("Request from user {} for other users events", userId);
         return requestService.getOtherUsersEventsRequests(userId);
     }
