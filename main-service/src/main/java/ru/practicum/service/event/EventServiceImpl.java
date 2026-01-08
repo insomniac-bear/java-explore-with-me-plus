@@ -122,6 +122,7 @@ public class EventServiceImpl implements EventService {
             }
             predicate.and(QEvent.event.eventDate.loe(criteria.getRangeEnd()));
         }
+
         if (criteria.isOnlyAvailable()) {
             predicate.and(QEvent.event.participantLimit.eq(0)
                     .or(QEvent.event.participantLimit.gt(QEvent.event.confirmedRequests)));

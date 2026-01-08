@@ -19,7 +19,7 @@ public class ErrorHandler {
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiError handleNotFound(NoSuchElementException e) {
-        log.warn("NotFoundException: {}", e.getMessage(), e);
+        log.error("NotFoundException: {}", e.getMessage(), e);
         return ApiError.builder()
                 .status("NOT_FOUND")
                 .reason("The required object was not found.")
@@ -52,7 +52,7 @@ public class ErrorHandler {
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleBadRequest(Exception e) {
-        log.warn("BadRequestException: {}", e.getMessage(), e);
+        log.error("BadRequestException: {}", e.getMessage(), e);
         return ApiError.builder()
                 .status("BAD_REQUEST")
                 .reason("Incorrectly made request.")
@@ -67,6 +67,7 @@ public class ErrorHandler {
     })
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ApiError handleForbiddenRequest(Exception e) {
+        log.error("ForbiddenException: {}", e.getMessage(), e);
         return ApiError.builder()
                 .status("FORBIDDEN")
                 .reason("Access denied.")
