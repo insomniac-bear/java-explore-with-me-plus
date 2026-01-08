@@ -45,6 +45,7 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional
     public EventResponseDto create(Long userId, NewEventRequestDto req) {
+        log.info("Create event request: {}", req);
         User user = findUser(userId);
 
         Category category = categoryRepository.findById(req.getCategory())
@@ -53,6 +54,7 @@ public class EventServiceImpl implements EventService {
                 });
 
         Event newEvent = mapper.eventRequestToEvent(req, category, user);
+        log.info("Create new event: {}", newEvent);
 
         Event savedEvent = eventRepository.save(newEvent);
         log.info("Создано новое событие {} от пользователя {}", savedEvent, user);

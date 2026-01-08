@@ -1,6 +1,7 @@
 package ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class CompilationServiceImpl implements CompilationService {
 
     private final CompilationRepository repository;
@@ -29,6 +31,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationDto add(NewCompilationDto dto) {
+        log.info("Adding new compilation dto {}", dto);
 
         Set<Event> events = dto.getEvents() == null ?
                 Set.of() :
@@ -46,6 +49,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public void delete(Long id) {
+        log.info("Deleting compilation with id {}", id);
         if (!repository.existsById(id)) {
             throw new NoSuchElementException("Compilation with id=" + id + " was not found");
         }
@@ -54,7 +58,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationDto update(Long id, UpdateCompilationRequest dto) {
-
+        log.info("Updating compilation with id {}", id);
         Compilation comp = repository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(
                         "Compilation with id=" + id + " was not found"));
@@ -76,6 +80,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public List<CompilationDto> findAll(Boolean pinned, Pageable pageable) {
+        log.info("Finding compilations with pinned {}", pinned);
         if (pinned == null) {
             return repository.findAll(pageable)
                     .stream()
@@ -91,6 +96,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationDto findById(Long compId) {
+        log.info("Finding compilation with id {}", compId);
         Compilation comp = repository.findById(compId)
                 .orElseThrow(() -> new NoSuchElementException(
                         "Compilation with id=" + compId + " was not found"));
