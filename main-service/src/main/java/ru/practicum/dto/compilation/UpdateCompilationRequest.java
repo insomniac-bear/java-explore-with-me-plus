@@ -1,6 +1,5 @@
 package ru.practicum.dto.compilation;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +19,5 @@ public class UpdateCompilationRequest {
     private Boolean pinned;
 
     @Size(max = 50)
-    @NotBlank
     private String title;
 }

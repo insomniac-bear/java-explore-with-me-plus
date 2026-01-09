@@ -59,7 +59,7 @@ public class CompilationServiceImpl implements CompilationService {
                 .orElseThrow(() -> new NoSuchElementException(
                         "Compilation with id=" + id + " was not found"));
 
-        if (dto.getTitle() != null)
+        if (dto.getTitle() != null && !dto.getTitle().isBlank())
             comp.setTitle(dto.getTitle());
 
         if (dto.getPinned() != null)
