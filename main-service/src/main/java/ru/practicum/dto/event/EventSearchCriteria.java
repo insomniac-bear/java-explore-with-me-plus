@@ -50,7 +50,7 @@ public class EventSearchCriteria {
     private Integer size = 10;
 
     public boolean hasText() {
-        return text != null && !text.trim().isEmpty();
+        return text != null && !text.trim().isBlank();
     }
 
     public boolean hasCategories() {

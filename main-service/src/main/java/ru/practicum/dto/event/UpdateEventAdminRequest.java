@@ -12,6 +12,8 @@ import ru.practicum.util.EventStateAction;
 
 import java.time.LocalDateTime;
 
+import static ru.practicum.util.Patterns.TIMESTAMP_PATTERN;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,7 +29,7 @@ public class UpdateEventAdminRequest {
     @Length(min = 20, max = 7000)
     private String description;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = TIMESTAMP_PATTERN)
     @Future
     private LocalDateTime eventDate;
 

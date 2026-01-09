@@ -18,10 +18,10 @@ public class Compilation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String title;
 
-    @Column(nullable = false)
+    @Column
     private Boolean pinned = false;
 
     @ManyToMany

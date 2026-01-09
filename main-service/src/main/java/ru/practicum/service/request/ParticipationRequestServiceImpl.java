@@ -123,7 +123,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
         request.setStatus(ParticipationRequestStatus.CANCELED);
 
-        return requestMapper.mapToDto(requestRepository.save(request));
+        return requestMapper.mapToDto(request);
     }
 
     @Override
@@ -197,9 +197,6 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
         } else {
             throw new ConflictException("Status not yet implemented");
         }
-
-        eventRepository.save(event);
-        requestRepository.saveAll(requests);
 
         return EventRequestStatusUpdateResult.builder()
                 .confirmedRequests(confirmedRequests)

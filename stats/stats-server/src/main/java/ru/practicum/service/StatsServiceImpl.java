@@ -16,13 +16,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static ru.practicum.dto.Const.TIMESTAMP_PATTERN;
+
 @Service
 @Slf4j
 @AllArgsConstructor
 @Transactional(readOnly = true)
 public class StatsServiceImpl implements StatsService {
-    private static final String TIMESTAMP_PATTERN = "yyyy-MM-dd HH:mm:ss";
-
     private final StatsRepository statsRepository;
     private final EndpointHitMapper endpointHitMapper;
 

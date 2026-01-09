@@ -71,10 +71,11 @@ public class CompilationServiceImpl implements CompilationService {
                             .stream().collect(Collectors.toSet())
             );
 
-        return mapper.toDto(repository.save(comp));
+        return mapper.toDto(comp);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CompilationDto> findAll(Boolean pinned, Pageable pageable) {
         if (pinned == null) {
             return repository.findAll(pageable)
@@ -90,6 +91,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CompilationDto findById(Long compId) {
         Compilation comp = repository.findById(compId)
                 .orElseThrow(() -> new NoSuchElementException(

@@ -43,15 +43,11 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new NoSuchElementException("Category with id=" + id + " was not found"));
 
         category.setName(dto.getName());
-
-        try {
-            return mapper.toDto(repository.save(category));
-        } catch (DataIntegrityViolationException e) {
-            throw e;
-        }
+        return mapper.toDto(category);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CategoryDto> findAll(Pageable pageable) {
         Page<Category> categoryPage = repository.findAll(pageable);
         return categoryPage.getContent().stream()
@@ -60,6 +56,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CategoryDto findById(Long catId) {
         Category category = repository.findById(catId)
                 .orElseThrow(() -> new NoSuchElementException("Category with id=" + catId + " was not found"));

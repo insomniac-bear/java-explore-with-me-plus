@@ -4,5 +4,5 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class Const {
-    static final String TIMESTAMP_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    public static final String TIMESTAMP_PATTERN = "yyyy-MM-dd HH:mm:ss";
 }

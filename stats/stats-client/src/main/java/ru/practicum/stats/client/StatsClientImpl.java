@@ -16,12 +16,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
+import static ru.practicum.dto.Const.TIMESTAMP_PATTERN;
+
 @Component
 public class StatsClientImpl implements StatsClient {
 
     private final RestClient restClient;
     private final String serverUrl;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIMESTAMP_PATTERN);
 
     public StatsClientImpl(@Value("${server.url:http://localhost:9090}") String serverUrl) {
         this.restClient = RestClient.create();

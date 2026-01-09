@@ -200,11 +200,9 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NoSuchElementException("Event with id " + eventId + " not found"));
 
         Event updatedEvent = updateEventByAdmin(event, req);
-        Event savedEvent = eventRepository.save(updatedEvent);
+        log.info("Updated event: {}", updatedEvent);
 
-        log.info("Updated event: {}", savedEvent);
-
-        return mapper.toAdminEventFullDto(savedEvent);
+        return mapper.toAdminEventFullDto(updatedEvent);
     }
 
     @Transactional
