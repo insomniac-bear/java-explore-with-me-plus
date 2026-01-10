@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.event.*;
+import ru.practicum.dto.location.UpdateLocationDto;
 import ru.practicum.dto.request.ParticipationRequestDto;
 import ru.practicum.service.event.EventService;
 import ru.practicum.service.request.ParticipationRequestService;
@@ -17,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/users/{userId}/events")
 @RequiredArgsConstructor
+@Valid
 public class UsersEventsController {
     private final EventService service;
     private final ParticipationRequestService requestService;
@@ -70,5 +73,18 @@ public class UsersEventsController {
         log.info("Новый статус для заявок на участие в событии {} пользователя {}",eventId, userId);
         return requestService.updateRequestStatus(userId, eventId, req);
     }
+
+    //!!!!!!!!FEATURE - 3 ЗАДАНИЕ
+    @PatchMapping("/{eventId}/location")
+    @ResponseStatus(HttpStatus.OK)
+    public EventResponseDto updateLocation(
+            @PathVariable Long userId,
+            @PathVariable Long eventId,
+            @Valid @RequestBody UpdateLocationDto req
+    ) {
+        log.info("Запрос на обновление локации события: {}", userId, eventId, req);
+        return service.updateEventLocation(userId, eventId, req);
+    }
+    //!!!!!!!!FEATURE - 3 ЗАДАНИЕ
 
 }

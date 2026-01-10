@@ -1,7 +1,10 @@
 package ru.practicum.service.event;
 
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import ru.practicum.dto.event.*;
+import ru.practicum.dto.location.UpdateLocationDto;
 import ru.practicum.util.EventState;
 
 import java.time.LocalDateTime;
@@ -26,4 +29,8 @@ public interface EventService {
     List<AdminEventResponseDto> findAdminEvents(List<Long> users, List<EventState> states,
                                                 List<Long> categories, LocalDateTime rangeStart,
                                                 LocalDateTime rangeEnd, Pageable pageable);
+
+    EventResponseDto updateEventLocation(Long userId, Long eventId, UpdateLocationDto req);
+
+    ShortEventResponseDto findByLocation(Long locationId,Pageable pageable);
 }

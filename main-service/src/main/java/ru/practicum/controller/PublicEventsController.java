@@ -3,6 +3,8 @@ package ru.practicum.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.EndpointHitDto;
@@ -30,18 +32,36 @@ public class PublicEventsController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ShortEventResponseDto> findAll(@ModelAttribute EventSearchCriteria criteria, HttpServletRequest req) throws Exception {
-        List<ShortEventResponseDto> res = service.find(criteria);
-        saveHit(req);
-        return res;
+       log.info("Find all events");
+       List<ShortEventResponseDto> res = service.find(criteria);
+       saveHit(req);
+       return res;
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EventResponseDto getEvent(@PathVariable Long id, HttpServletRequest req) {
+        log.info("Get event by id {}", id);
         EventResponseDto res = service.get(id);
         saveHit(req);
         return res;
     }
+
+    //!!!!!!!!FEATURE - 3 ЗАДАНИЕ
+    @GetMapping("/findBylocation/{locationId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ShortEventResponseDto findEventsByLocation(@PathVariable Long locationId,
+                                                      @RequestParam(defaultValue = "0") Integer from,
+                                                      @RequestParam(defaultValue = "10") Integer size,
+                                                      HttpServletRequest req) {
+
+        log.info("Find events by location {}", locationId);
+        ShortEventResponseDto events = service.findByLocation(locationId, PageRequest.of(from / size, size, Sort.by("id").ascending()));
+        saveHit(req);
+        return events;
+    }
+    //!!!!!!!!FEATURE - 3 ЗАДАНИЕ
+
 
     private void saveHit(HttpServletRequest request) {
         EndpointHitDto endpointHitDto = new EndpointHitDto();

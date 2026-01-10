@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.dto.event.*;
+import ru.practicum.dto.location.UpdateLocationDto;
 import ru.practicum.error.ConflictException;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.model.Category;
@@ -192,6 +193,19 @@ public class EventServiceImpl implements EventService {
                 .map(mapper::toAdminEventFullDto)
                 .collect(Collectors.toList());
     }
+
+    //!!!!!!!!FEATURE - 3 ЗАДАНИЕ
+    @Override
+    @Transactional
+    public EventResponseDto updateEventLocation(Long userId, Long eventId, UpdateLocationDto req) {
+        return null;
+    }
+
+    @Override
+    public ShortEventResponseDto findByLocation(Long locationId, Pageable pageable) {
+        return null;
+    }
+    //!!!!!!!!FEATURE - 3 ЗАДАНИЕ
 
     @Override
     @Transactional
