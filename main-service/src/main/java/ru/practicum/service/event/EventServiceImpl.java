@@ -205,6 +205,11 @@ public class EventServiceImpl implements EventService {
     public ShortEventResponseDto findByLocation(Long locationId, Pageable pageable) {
         return null;
     }
+
+    @Override
+    public EventResponseDto findEventsNear(Double lat, Double lon, Double radius, Pageable pageable) {
+        return null;
+    }
     //!!!!!!!!FEATURE - 3 ЗАДАНИЕ
 
     @Override

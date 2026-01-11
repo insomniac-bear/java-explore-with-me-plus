@@ -1,6 +1,7 @@
 package ru.practicum.service.event;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import ru.practicum.dto.event.*;
@@ -33,4 +34,6 @@ public interface EventService {
     EventResponseDto updateEventLocation(Long userId, Long eventId, UpdateLocationDto req);
 
     ShortEventResponseDto findByLocation(Long locationId,Pageable pageable);
+
+    EventResponseDto findEventsNear(Double lat, Double lon, Double radius, Pageable pageable);
 }

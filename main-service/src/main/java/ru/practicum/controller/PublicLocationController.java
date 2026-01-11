@@ -5,14 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.dto.location.LocationResponseDto;
 import ru.practicum.dto.location.ShortLocationResponseDto;
 import ru.practicum.service.location.LocationService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/public/controller")
+@RequestMapping("/public/location")
 @RequiredArgsConstructor
 @Slf4j
 public class PublicLocationController {
@@ -20,7 +19,7 @@ public class PublicLocationController {
     private final LocationService locationService;
 
     @GetMapping("/{locationId}")
-    public ShortLocationResponseDto findOne(@PathVariable Long locationId) {
+    public ShortLocationResponseDto findById(@PathVariable Long locationId) {
         log.info("Find location with id {}", locationId);
         return locationService.getById(locationId);
     }
