@@ -1,6 +1,5 @@
 package ru.practicum.service.location;
 
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import ru.practicum.dto.location.LocationResponseDto;
 import ru.practicum.dto.location.NewLocationDto;
@@ -11,17 +10,17 @@ import java.util.List;
 
 public interface LocationService {
 
-    List<LocationResponseDto> findAll(Long userId, Pageable pageable);
+    List<LocationResponseDto> findAllFull(Pageable pageable);
 
-    LocationResponseDto getById(Long userId, Long locationId);
+    LocationResponseDto findByIdFull(Long locationId);
 
-    List<ShortLocationResponseDto> findAll(Pageable pageable);
+    List<ShortLocationResponseDto> findAllShort(Pageable pageable);
 
-    ShortLocationResponseDto getById(Long locationId);
+    ShortLocationResponseDto findByIdShort(Long locationId);
 
-    NewLocationDto save(Long userId, NewLocationDto dto);
+    LocationResponseDto save(NewLocationDto dto);
 
-    LocationResponseDto update(Long userId, Long locationId, UpdateLocationDto dto);
+    LocationResponseDto update(Long locationId, UpdateLocationDto dto);
 
-    void delete(Long userId, Long locationId);
+    void delete(Long locationId);
 }

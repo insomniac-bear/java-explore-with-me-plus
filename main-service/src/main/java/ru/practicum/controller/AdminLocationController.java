@@ -1,5 +1,6 @@
 package ru.practicum.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -22,34 +23,33 @@ public class AdminLocationController {
     private final LocationService locationService;
 
     @GetMapping
-    public List<LocationResponseDto> findAll(@PathVariable Long userId,
-                                             @RequestParam(defaultValue = "0") Integer from,
+    @ResponseStatus(HttpStatus.OK)
+    public List<LocationResponseDto> findAllFull(@RequestParam(defaultValue = "0") Integer from,
                                              @RequestParam(defaultValue = "10") Integer size) {
         log.info("Find all locations");
-        return locationService.findAll(userId, PageRequest.of(from / size, size, Sort.by("id").ascending()));
+        return locationService.findAllFull(PageRequest.of(from / size, size, Sort.by("id").ascending()));
     }
 
     @GetMapping("/{locationId}")
-    public LocationResponseDto findOne(@PathVariable Long locationId,
-                                       @PathVariable Long userId) {
+    @ResponseStatus(HttpStatus.OK)
+    public LocationResponseDto findByIdFull(@PathVariable Long locationId) {
         log.info("Find location with id {}", locationId);
-        return locationService.getById(locationId, userId);
+        return locationService.findByIdFull(locationId);
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
-    public NewLocationDto save(@PathVariable Long userId, NewLocationDto dto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public LocationResponseDto save(@RequestBody @Valid NewLocationDto dto) {
         log.info("Save location {}", dto);
-        return locationService.save(userId, dto);
+        return locationService.save(dto);
     }
 
     @PatchMapping("/{locationId}")
     @ResponseStatus(HttpStatus.OK)
-    public LocationResponseDto update(@PathVariable Long userId,
-                                      @PathVariable Long locationId,
-                                      @RequestBody UpdateLocationDto dto) {
+    public LocationResponseDto update(@PathVariable Long locationId,
+                                      @Valid @RequestBody UpdateLocationDto dto) {
         log.info("Update location {}", dto);
-        return locationService.update(userId, locationId, dto);
+        return locationService.update(locationId, dto);
     }
 
     @DeleteMapping("/{locationId}")
@@ -57,7 +57,7 @@ public class AdminLocationController {
     public void delete(@PathVariable Long userId,
                        @PathVariable Long locationId) {
         log.info("Delete location {}", locationId);
-        locationService.delete(userId, locationId);
+        locationService.delete(locationId);
     }
 
 }
