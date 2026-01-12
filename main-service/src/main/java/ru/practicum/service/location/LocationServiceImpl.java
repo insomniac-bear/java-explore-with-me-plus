@@ -76,8 +76,6 @@ public class LocationServiceImpl implements LocationService {
                 .orElseThrow(() -> new NoSuchElementException(
                         "Location with id=" + locationId + " not found"));
         mapper.updateFromDto(dto, existingLocation);
-
-        // 3. Сохраняем и возвращаем обновлённый DTO
         Location updatedLocation = repository.save(existingLocation);
         return mapper.toFullResponseDto(updatedLocation);
     }
