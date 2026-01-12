@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
 import ru.practicum.dto.category.CategoryDto;
+import ru.practicum.dto.location.ShortLocationResponseDto;
 import ru.practicum.dto.user.UserShortDto;
 
 import java.time.LocalDateTime;
@@ -23,7 +24,7 @@ public class ShortEventResponseDto {
 
     private UserShortDto initiator;
 
-    private LocationDto location;
+    private ShortLocationResponseDto location;
 
     private Boolean paid;
 

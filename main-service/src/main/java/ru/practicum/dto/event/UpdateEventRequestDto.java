@@ -20,7 +20,8 @@ public class UpdateEventRequestDto {
     private Long category;
     @JsonFormat(pattern = TIMESTAMP_PATTERN)
     private LocalDateTime eventDate;
-    private LocationDto location;
+   // private LocationDto location;
+    private Long location;
     private Boolean paid;
     private Integer participantLimit;
     private Boolean requestModeration;

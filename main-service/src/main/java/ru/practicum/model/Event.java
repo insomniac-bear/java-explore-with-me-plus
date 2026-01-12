@@ -54,13 +54,17 @@ public class Event {
     @Column(name = "request_moderation", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private Boolean requestModeration;
 
-    @Column
+  /*  @Column
     @NotNull
     private Double lat;
 
     @Column
     @NotNull
-    private Double lon;
+    private Double lon; */
+
+    @ManyToOne
+    @Column(name ="location_id")
+    private Location location;
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(20) DEFAULT WAITING")
@@ -91,8 +95,8 @@ public class Event {
                 ", paid=" + paid +
                 ", participantLimit=" + participantLimit +
                 ", requestModeration=" + requestModeration +
-                ", lat=" + lat +
-                ", lon=" + lon +
+                //", lat=" + lat +
+               // ", lon=" + lon +
                 ", state=" + state +
                 "}";
     }

@@ -37,7 +37,8 @@ public class UpdateEventAdminRequest {
     private Integer participantLimit;
 
     private Long category;
-    private LocationDto location;
+   // private LocationDto location;
+    private Long location;
     private Boolean paid;
     private Boolean requestModeration;
     private EventStateAction stateAction;
