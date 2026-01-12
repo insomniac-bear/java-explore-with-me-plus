@@ -67,5 +67,11 @@ CREATE TABLE IF NOT EXISTS locations (
     longitude FLOAT NOT NULL CHECK (longitude BETWEEN -180 AND 180),
     radius FLOAT DEFAULT 0 CHECK (radius >=0),
     type VARCHAR(40) NOT NULL,
-    CONSTRAINT chk_type CHECK (type IN ('THEATER', 'OTHER'))
+    CONSTRAINT chk_type CHECK (type IN ('CONFERENCE_HALL',
+                                        'OPEN_AIR',
+                                        'COWORKING',
+                                        'STADIUM',
+                                        'THEATER',
+                                        'RESTAURANT',
+                                        'OTHER'))
 );

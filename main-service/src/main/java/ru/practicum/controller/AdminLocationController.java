@@ -15,7 +15,7 @@ import ru.practicum.service.location.LocationService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/locations")
+@RequestMapping("/admin/location")
 @RequiredArgsConstructor
 @Slf4j
 public class AdminLocationController {
@@ -54,8 +54,7 @@ public class AdminLocationController {
 
     @DeleteMapping("/{locationId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long userId,
-                       @PathVariable Long locationId) {
+    public void delete(@PathVariable Long locationId) {
         log.info("Delete location {}", locationId);
         locationService.delete(locationId);
     }

@@ -1,14 +1,14 @@
 package ru.practicum.dto.location;
 
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import ru.practicum.util.LocationType;
 
 @Data
 @AllArgsConstructor
@@ -25,10 +25,12 @@ public class NewLocationDto {
 
     @NotNull
     @DecimalMin("-180.0")
-    @DecimalMax("180,0")
+    @DecimalMax("180.0")
     private Double longitude;
 
     @PositiveOrZero
     private Double radius;
 
+    @NotNull
+    private LocationType type;
 }

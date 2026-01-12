@@ -31,7 +31,7 @@ public class Location {
 
     @NotNull
     @DecimalMin("-180.0")
-    @DecimalMax("180,0")
+    @DecimalMax("180.0")
     private Double longitude;
 
     @PositiveOrZero
