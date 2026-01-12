@@ -12,15 +12,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.dto.event.*;
+import ru.practicum.dto.location.LocationResponseDto;
 import ru.practicum.dto.location.UpdateLocationDto;
 import ru.practicum.error.ConflictException;
 import ru.practicum.mapper.EventMapper;
-import ru.practicum.model.Category;
-import ru.practicum.model.Event;
+import ru.practicum.model.*;
 import ru.practicum.model.QEvent;
-import ru.practicum.model.User;
 import ru.practicum.repository.CategoryRepository;
 import ru.practicum.repository.EventRepository;
+import ru.practicum.repository.LocationRepository;
 import ru.practicum.repository.UserRepository;
 import ru.practicum.util.EventState;
 import ru.practicum.util.EventStateAction;
@@ -41,6 +41,7 @@ public class EventServiceImpl implements EventService {
     private final CategoryRepository categoryRepository;
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
+    private final LocationRepository locationRepository;
     private final StatsClient statsClient;
 
     @Override
@@ -53,7 +54,12 @@ public class EventServiceImpl implements EventService {
                     return new NoSuchElementException("Category with id " + req.getCategory() + " notFound");
                 });
 
-        Event newEvent = mapper.eventRequestToEvent(req, category, user);
+        Location location = locationRepository.findById(req.getLocation())
+                .orElseThrow(() -> {
+                    return new NoSuchElementException("Location with id " + req.getLocation() + " notFound");
+                        });
+
+        Event newEvent = mapper.eventRequestToEvent(req, category, user, location);
 
         Event savedEvent = eventRepository.save(newEvent);
         log.info("Создано новое событие {} от пользователя {}", savedEvent, user);

@@ -15,6 +15,7 @@ public interface LocationMapper {
     ShortLocationResponseDto toShortResponseDto(Location location);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "type", ignore = true)
     Location toLocation(NewLocationDto dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, ignoreByDefault = false)
