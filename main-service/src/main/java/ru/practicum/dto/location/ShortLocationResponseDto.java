@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.util.LocationType;
 
 @Data
 @AllArgsConstructor
@@ -14,4 +15,6 @@ public class ShortLocationResponseDto {
     private String name;
     private Double latitude;
     private Double longitude;
+    private Double radius;
+    private LocationType locationType;
 }

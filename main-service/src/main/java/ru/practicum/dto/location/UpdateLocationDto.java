@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.util.LocationType;
 
 @Data
 @AllArgsConstructor
@@ -26,4 +27,6 @@ public class UpdateLocationDto {
 
     @PositiveOrZero
     private Double radius;
+
+    private LocationType locationType;
 }
