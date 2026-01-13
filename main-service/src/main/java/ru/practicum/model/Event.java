@@ -21,54 +21,47 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false, length = 120)
     @NotBlank
     @Length(min = 3, max = 120)
     private String title;
 
-    @Column
+    @Column(nullable = false, length = 7000)
     @NotBlank
-    @Length(min = 20)
+    @Length(min = 20, max = 7000)
     private String description;
 
-    @Column
+    @Column(nullable = false, length = 2000)
     @NotBlank
     @Length(min = 20, max = 2000)
     private String annotation;
 
-    @Column(name = "event_date")
+    @Column(name = "event_date", nullable = false)
     @NotNull
     @Future
     private LocalDateTime eventDate;
 
-    @Column(name = "created_on")
+    @Column(name = "created_on", nullable = false)
     private LocalDateTime createdOn = LocalDateTime.now();
 
     @Column(columnDefinition = "BOOLEAN DEFAULT FALSE")
-    private Boolean paid;
+    private Boolean paid = false;
 
     @Column(name = "participant_limit", columnDefinition = "INT DEFAULT 0")
     @PositiveOrZero
-    private Integer participantLimit;
+    private Integer participantLimit = 0;
 
     @Column(name = "request_moderation", columnDefinition = "BOOLEAN DEFAULT FALSE")
-    private Boolean requestModeration;
-
-  /*  @Column
-    @NotNull
-    private Double lat;
-
-    @Column
-    @NotNull
-    private Double lon; */
+    private Boolean requestModeration = false;
 
     @ManyToOne
-    @Column(name ="location_id")
+    @JoinColumn(name = "location_id", nullable = false)
+    @NotNull
     private Location location;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "VARCHAR(20) DEFAULT WAITING")
-    private EventState state;
+    @Column(columnDefinition = "VARCHAR(20) DEFAULT 'PENDING'")
+    private EventState state = EventState.PENDING;
 
     @Column(name = "published_on")
     private LocalDateTime publishedOn;
@@ -82,22 +75,17 @@ public class Event {
     private Category category;
 
     @Column(name = "confirmed_requests")
-    private int confirmedRequests;
+    private Integer confirmedRequests = 0;
 
     @Override
     public String toString() {
         return "Event{" +
-                ", id=" + id +
-                ", title=" + title +
-                ", description=" + description +
-                ", annotation=" + annotation +
+                "id=" + id + // Убрал лишнюю запятую в начале
+                ", title='" + title + '\'' + // Добавил кавычки
                 ", eventDate=" + eventDate +
-                ", paid=" + paid +
-                ", participantLimit=" + participantLimit +
-                ", requestModeration=" + requestModeration +
-                //", lat=" + lat +
-               // ", lon=" + lon +
                 ", state=" + state +
-                "}";
+                ", location=" + (location != null ? location.getName() : "null") +
+                ", category=" + (category != null ? category.getName() : "null") +
+                '}';
     }
 }

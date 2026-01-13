@@ -1,9 +1,12 @@
 package ru.practicum.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.dto.category.CategoryDto;
+import ru.practicum.dto.location.LocationResponseDto;
 import ru.practicum.dto.user.UserShortDto;
 import ru.practicum.util.EventState;
 
@@ -13,6 +16,8 @@ import static ru.practicum.util.Patterns.TIMESTAMP_PATTERN;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AdminEventResponseDto {
 
     private String annotation;
@@ -33,7 +38,7 @@ public class AdminEventResponseDto {
 
     private UserShortDto initiator;
 
-    private LocationDto location;
+    private LocationResponseDto location;
 
     private Boolean paid;
 

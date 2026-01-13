@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import ru.practicum.dto.location.UpdateLocationDto;
 import ru.practicum.util.EventStateAction;
 
 import java.time.LocalDateTime;
@@ -37,8 +38,7 @@ public class UpdateEventAdminRequest {
     private Integer participantLimit;
 
     private Long category;
-   // private LocationDto location;
-    private Long location;
+    private UpdateLocationDto location;
     private Boolean paid;
     private Boolean requestModeration;
     private EventStateAction stateAction;

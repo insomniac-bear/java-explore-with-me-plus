@@ -12,6 +12,7 @@ public interface LocationMapper {
 
     LocationResponseDto toFullResponseDto(Location location);
 
+    @Named("toShortResponseDto")
     ShortLocationResponseDto toShortResponseDto(Location location);
 
     @Mapping(target = "id", ignore = true)
