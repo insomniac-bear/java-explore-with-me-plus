@@ -12,12 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.dto.event.*;
-import ru.practicum.dto.location.LocationResponseDto;
 import ru.practicum.dto.location.UpdateLocationDto;
 import ru.practicum.error.ConflictException;
 import ru.practicum.mapper.EventMapper;
+import ru.practicum.mapper.LocationMapper;
 import ru.practicum.model.*;
-import ru.practicum.model.QEvent;
 import ru.practicum.repository.CategoryRepository;
 import ru.practicum.repository.EventRepository;
 import ru.practicum.repository.LocationRepository;
@@ -38,6 +37,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class EventServiceImpl implements EventService {
     private final EventMapper mapper;
+    private final LocationMapper locationMapper;
     private final CategoryRepository categoryRepository;
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
@@ -49,15 +49,16 @@ public class EventServiceImpl implements EventService {
     public EventResponseDto create(Long userId, NewEventRequestDto req) {
         User user = findUser(userId);
 
-        Category category = categoryRepository.findById(req.getCategory())
-                .orElseThrow(() -> {
-                    return new NoSuchElementException("Category with id " + req.getCategory() + " notFound");
-                });
+        Category category = findCategory(req.getCategory());
 
-        Location location = locationRepository.findById(req.getLocation())
-                .orElseThrow(() -> {
-                    return new NoSuchElementException("Location with id " + req.getLocation() + " notFound");
-                        });
+        Location location;
+        if (req.getLocation() != null) {
+            location = locationMapper.toLocation(req.getLocation());
+            Location savedLocation = locationRepository.save(location);
+            location = savedLocation;
+        } else {
+            throw new IllegalArgumentException("Требуется указать место проведения события");
+        }
 
         Event newEvent = mapper.eventRequestToEvent(req, category, user, location);
 
@@ -158,6 +159,10 @@ public class EventServiceImpl implements EventService {
             throw new ConflictException("Event could be changed only 2 hours before now");
         }
 
+        if (req.getLocation() != null && event.getLocation() != null) {
+            locationMapper.updateFromDto(req.getLocation(), event.getLocation());
+        }
+
         checkPermission(event, user);
         Category category = null;
 
@@ -204,17 +209,17 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional
     public EventResponseDto updateEventLocation(Long userId, Long eventId, UpdateLocationDto req) {
-        return null;
+        throw new UnsupportedOperationException("Feature not implemented yet");
     }
 
     @Override
     public ShortEventResponseDto findByLocation(Long locationId, Pageable pageable) {
-        return null;
+        throw new UnsupportedOperationException("Feature not implemented yet");
     }
 
     @Override
     public EventResponseDto findEventsNear(Double lat, Double lon, Double radius, Pageable pageable) {
-        return null;
+        throw new UnsupportedOperationException("Feature not implemented yet");
     }
     //!!!!!!!!FEATURE - 3 ЗАДАНИЕ
 
@@ -288,8 +293,7 @@ public class EventServiceImpl implements EventService {
         }
 
         if (update.getLocation() != null) {
-            event.setLat(update.getLocation().getLat());
-            event.setLon(update.getLocation().getLon());
+            locationMapper.updateFromDto(update.getLocation(), event.getLocation());
         }
 
         if (update.getPaid() != null) {
@@ -308,6 +312,12 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> {
                     return new NoSuchElementException("User with id " + userId + " notFound");
                 });
+    }
+
+    private Category findCategory(Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NoSuchElementException(
+                        "Category with id " + categoryId + " not found"));
     }
 
     private Event findEvent(Long eventId) {
