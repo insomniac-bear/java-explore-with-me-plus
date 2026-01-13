@@ -50,20 +50,20 @@ public class PublicEventsController {
     //!!!!!!!!FEATURE - 3 ЗАДАНИЕ
     @GetMapping("/location/{locationId}")
     @ResponseStatus(HttpStatus.OK)
-    public ShortEventResponseDto findEventsByLocation(@PathVariable Long locationId,
+    public List<ShortEventResponseDto> findEventsByLocation(@PathVariable Long locationId,
                                                       @RequestParam(defaultValue = "0") Integer from,
                                                       @RequestParam(defaultValue = "10") Integer size,
                                                       HttpServletRequest req) {
 
         log.info("Find events by location {}", locationId);
-        ShortEventResponseDto events = service.findByLocation(locationId, PageRequest.of(from / size, size, Sort.by("id").ascending()));
+        List <ShortEventResponseDto> events = service.findByLocation(locationId, PageRequest.of(from / size, size, Sort.by("id").ascending()));
         saveHit(req);
         return events;
     }
 
     @GetMapping("/near")
     @ResponseStatus(HttpStatus.OK)
-    public EventResponseDto findEventsNear(@RequestParam Double lat,
+    public List<ShortEventResponseDto> findEventsNear(@RequestParam Double lat,
                                            @RequestParam Double lon,
                                            @RequestParam(defaultValue = "5.0") Double radius,
                                            @RequestParam(defaultValue = "0") Integer from,

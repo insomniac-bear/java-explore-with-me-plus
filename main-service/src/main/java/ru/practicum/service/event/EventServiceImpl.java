@@ -24,6 +24,7 @@ import ru.practicum.repository.UserRepository;
 import ru.practicum.util.EventState;
 import ru.practicum.util.EventStateAction;
 import ru.practicum.stats.client.StatsClient;
+import ru.practicum.util.LocationType;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -209,18 +210,71 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional
     public EventResponseDto updateEventLocation(Long userId, Long eventId, UpdateLocationDto req) {
-        throw new UnsupportedOperationException("Feature not implemented yet");
+        User user = findUser(userId);
+        Event event = findEvent(eventId);
+
+        checkPermission(event, user);
+
+        if (event.getState() == EventState.PUBLISHED) {
+            throw new ConflictException("Cannot update published event");
+        }
+
+        Location location = Location.builder()
+                .name(req.getName() != null ? req.getName() : "Локация")
+                .latitude(req.getLatitude().doubleValue())
+                .longitude(req.getLongitude().doubleValue())
+                .radius(req.getRadius() != null ? req.getRadius().doubleValue(): 0.0)
+                .type(req.getLocationType() != null ? req.getLocationType() : LocationType.OTHER)
+                .build();
+
+        Location savedLocation = locationRepository.save(location);
+        event.setLocation(savedLocation);
+
+        Event savedEvent = eventRepository.save(event);
+        return mapper.eventToEventResponseDto(savedEvent, user);
+
     }
 
     @Override
-    public ShortEventResponseDto findByLocation(Long locationId, Pageable pageable) {
-        throw new UnsupportedOperationException("Feature not implemented yet");
+    public List<ShortEventResponseDto> findByLocation(Long locationId, Pageable pageable) {
+        Location location = findLocation(locationId);
+        List<Event> events = eventRepository.findByLocationId(locationId, pageable);
+        return events.stream()
+                .map(event -> {
+                    ShortEventResponseDto dto = mapper.eventToShortEventResponseDto(event);
+                    Long views = getViews(event.getId());
+                    if (views != null) {
+                        dto.setViews(views);
+                    }
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
     }
 
     @Override
-    public EventResponseDto findEventsNear(Double lat, Double lon, Double radius, Pageable pageable) {
-        throw new UnsupportedOperationException("Feature not implemented yet");
+    public List<ShortEventResponseDto> findEventsNear(Double lat, Double lon, Double radius, Pageable pageable) {
+        if (lat == null || lon == null) {
+            throw new IllegalArgumentException("Latitude and longitude are required");
+        }
+
+        if (radius == null || radius <= 0) {
+            radius = 5.0;
+        }
+
+        List<Event> events = eventRepository.findEventsNear(lat, lon, radius, pageable);
+        return events.stream()
+                .map(event -> {
+                    ShortEventResponseDto dto = mapper.eventToShortEventResponseDto(event);
+                    Long views = getViews(event.getId());
+                    if (views != null) {
+                        dto.setViews(views);
+                    }
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
+
     //!!!!!!!!FEATURE - 3 ЗАДАНИЕ
 
     @Override
@@ -318,6 +372,11 @@ public class EventServiceImpl implements EventService {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NoSuchElementException(
                         "Category with id " + categoryId + " not found"));
+    }
+
+    private Location findLocation(Long locationId) {
+        return locationRepository.findById(locationId)
+                .orElseThrow(() -> new NoSuchElementException("Location with id " + locationId + " not found"));
     }
 
     private Event findEvent(Long eventId) {

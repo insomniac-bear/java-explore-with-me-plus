@@ -36,4 +36,26 @@ public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPre
             Pageable pageable
     );
 
+    @Query("SELECT e FROM Event e " +
+            "WHERE e.location.id = :locationId " +
+            "AND e.state = 'PUBLISHED'")
+    List<Event> findByLocationId(@Param("locationId") Long locationId,
+                                 Pageable pageable);
+
+    @Query(value = """
+            SELECT e.* FROM events e 
+            JOIN locations l ON e.location_id = l.id 
+            WHERE distance(l.latitude, l.longitude, :lat, :lon) <= :radius 
+            AND e.state = 'PUBLISHED'
+            """, nativeQuery = true)
+    List<Event> findEventsNear(@Param("lat") Double lat,
+                               @Param("lon") Double lon,
+                               @Param("radius") Double radius,
+                               Pageable pageable);
+
+    @Query("SELECT COUNT(e) > 0 FROM Event e " +
+            "WHERE e.id = :eventId " +
+            "AND e.initiator.id = :userId")
+    boolean existsByIdAndInitiatorId(@Param("eventId") Long eventId,
+                                     @Param("userId") Long userId);
 }

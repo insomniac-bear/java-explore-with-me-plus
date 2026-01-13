@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.event.*;
 import ru.practicum.dto.location.UpdateLocationDto;
@@ -77,7 +76,7 @@ public class UsersEventsController {
     //!!!!!!!!FEATURE - 3 ЗАДАНИЕ
     @PatchMapping("/{eventId}/location")
     @ResponseStatus(HttpStatus.OK)
-    public EventResponseDto updateLocation(
+    public EventResponseDto updateEventLocation(
             @PathVariable Long userId,
             @PathVariable Long eventId,
             @Valid @RequestBody UpdateLocationDto req
