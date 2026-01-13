@@ -223,7 +223,7 @@ public class EventServiceImpl implements EventService {
                 .name(req.getName() != null ? req.getName() : "Локация")
                 .latitude(req.getLatitude().doubleValue())
                 .longitude(req.getLongitude().doubleValue())
-                .radius(req.getRadius() != null ? req.getRadius().doubleValue(): 0.0)
+                .radius(req.getRadius() != null ? req.getRadius().doubleValue() : 0.0)
                 .type(req.getLocationType() != null ? req.getLocationType() : LocationType.OTHER)
                 .build();
 

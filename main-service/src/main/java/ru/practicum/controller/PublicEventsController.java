@@ -56,7 +56,7 @@ public class PublicEventsController {
                                                       HttpServletRequest req) {
 
         log.info("Find events by location {}", locationId);
-        List <ShortEventResponseDto> events = service.findByLocation(locationId, PageRequest.of(from / size, size, Sort.by("id").ascending()));
+        List<ShortEventResponseDto> events = service.findByLocation(locationId, PageRequest.of(from / size, size, Sort.by("id").ascending()));
         saveHit(req);
         return events;
     }

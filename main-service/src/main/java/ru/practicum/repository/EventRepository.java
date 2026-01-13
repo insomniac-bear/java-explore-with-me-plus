@@ -43,9 +43,9 @@ public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPre
                                  Pageable pageable);
 
     @Query(value = """
-            SELECT e.* FROM events e 
-            JOIN locations l ON e.location_id = l.id 
-            WHERE distance(l.latitude, l.longitude, :lat, :lon) <= :radius 
+            SELECT e.* FROM events e
+            JOIN locations l ON e.location_id = l.id
+            WHERE distance(l.latitude, l.longitude, :lat, :lon) <= :radius
             AND e.state = 'PUBLISHED'
             """, nativeQuery = true)
     List<Event> findEventsNear(@Param("lat") Double lat,
