@@ -80,8 +80,8 @@ public class Event {
     @Override
     public String toString() {
         return "Event{" +
-                "id=" + id + // Убрал лишнюю запятую в начале
-                ", title='" + title + '\'' + // Добавил кавычки
+                "id=" + id +
+                ", title='" + title + '\'' +
                 ", eventDate=" + eventDate +
                 ", state=" + state +
                 ", location=" + (location != null ? location.getName() : "null") +
