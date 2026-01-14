@@ -75,8 +75,6 @@ public class PublicEventsController {
         log.info("Find events in locations where user is located: lat={}, lon={}, from={}, size={}",
                 lat, lon, from, size);
 
-
-
         return service.findEventsNear(lat, lon, radius,
                 PageRequest.of(from / size, size, Sort.by("event_date").descending()));
     }
