@@ -1,5 +1,8 @@
 package ru.practicum.repository;
 
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -36,4 +39,20 @@ public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPre
             Pageable pageable
     );
 
+    @Query(value = """
+        SELECT e.* FROM events e
+        WHERE distance(:lat, :lon, e.lat, e.lon) <= :radius
+        AND e.state = 'PUBLISHED'
+        ORDER BY e.event_date ASC
+        """,
+            countQuery = """
+        SELECT COUNT(*) FROM events e
+        WHERE distance(:lat, :lon, e.lat, e.lon) <= :radius
+        AND e.state = 'PUBLISHED'
+        """,
+            nativeQuery = true)
+    List<Event> findEventsWithinLocationRadius(@Param("lat") Double lat,
+                                       @Param("lon") Double lon,
+                                       @Param("radius") Double radius,
+                                       Pageable pageable);
 }

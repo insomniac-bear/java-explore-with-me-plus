@@ -74,17 +74,4 @@ public class UsersEventsController {
         return requestService.updateRequestStatus(userId, eventId, req);
     }
 
-    //!!!!!!!!FEATURE - 3 ЗАДАНИЕ
-    @PatchMapping("/{eventId}/location")
-    @ResponseStatus(HttpStatus.OK)
-    public EventResponseDto updateLocation(
-            @PathVariable Long userId,
-            @PathVariable Long eventId,
-            @Valid @RequestBody UpdateLocationDto req
-    ) {
-        log.info("Запрос на обновление локации события: {}", userId, eventId, req);
-        return service.updateEventLocation(userId, eventId, req);
-    }
-    //!!!!!!!!FEATURE - 3 ЗАДАНИЕ
-
 }

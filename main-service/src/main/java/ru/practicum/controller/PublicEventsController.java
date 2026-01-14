@@ -1,6 +1,9 @@
 package ru.practicum.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -50,27 +53,32 @@ public class PublicEventsController {
     //!!!!!!!!FEATURE - 3 ЗАДАНИЕ
     @GetMapping("/location/{locationId}")
     @ResponseStatus(HttpStatus.OK)
-    public ShortEventResponseDto findEventsByLocation(@PathVariable Long locationId,
+    public List<ShortEventResponseDto> findEventsByLocation(@PathVariable Long locationId,
                                                       @RequestParam(defaultValue = "0") Integer from,
                                                       @RequestParam(defaultValue = "10") Integer size,
                                                       HttpServletRequest req) {
 
         log.info("Find events by location {}", locationId);
-        ShortEventResponseDto events = service.findByLocation(locationId, PageRequest.of(from / size, size, Sort.by("id").ascending()));
         saveHit(req);
-        return events;
+        return service.findEventsByLocation(locationId, PageRequest.of(from / size, size, Sort.by("event_date").descending()));
+
     }
 
     @GetMapping("/near")
     @ResponseStatus(HttpStatus.OK)
-    public EventResponseDto findEventsNear(@RequestParam Double lat,
-                                           @RequestParam Double lon,
-                                           @RequestParam(defaultValue = "5.0") Double radius,
-                                           @RequestParam(defaultValue = "0") Integer from,
-                                           @RequestParam(defaultValue = "10") Integer size) {
+    public List<ShortEventResponseDto> findEventsNear(@RequestParam @DecimalMin("-90.0") @DecimalMax("90.0") Double lat,
+                                                      @RequestParam @DecimalMin("-180.0") @DecimalMax("180.0") Double lon,
+                                                      @RequestParam(defaultValue = "1.0") @DecimalMin("0.1") Double radius,
+                                                      @RequestParam(defaultValue = "0") Integer from,
+                                                      @RequestParam(defaultValue = "10") Integer size) {
+
+        log.info("Find events in locations where user is located: lat={}, lon={}, from={}, size={}",
+                lat, lon, from, size);
+
+
 
         return service.findEventsNear(lat, lon, radius,
-                PageRequest.of(from / size, size, Sort.by("id").ascending()));
+                PageRequest.of(from / size, size, Sort.by("event_date").descending()));
     }
     //!!!!!!!!FEATURE - 3 ЗАДАНИЕ
 

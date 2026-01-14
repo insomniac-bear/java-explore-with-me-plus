@@ -31,9 +31,8 @@ public interface EventService {
                                                 List<Long> categories, LocalDateTime rangeStart,
                                                 LocalDateTime rangeEnd, Pageable pageable);
 
-    EventResponseDto updateEventLocation(Long userId, Long eventId, UpdateLocationDto req);
+    List<ShortEventResponseDto> findEventsByLocation(Long locationId, Pageable pageable);
 
-    ShortEventResponseDto findByLocation(Long locationId,Pageable pageable);
+    List<ShortEventResponseDto> findEventsNear(Double lat, Double lon, Double radius, Pageable pageable);
 
-    EventResponseDto findEventsNear(Double lat, Double lon, Double radius, Pageable pageable);
 }
