@@ -1,7 +1,6 @@
 package ru.practicum.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import lombok.RequiredArgsConstructor;

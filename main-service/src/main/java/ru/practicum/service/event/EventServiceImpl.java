@@ -15,7 +15,6 @@ import ru.practicum.dto.event.*;
 import ru.practicum.error.ConflictException;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.model.*;
-import ru.practicum.model.QEvent;
 import ru.practicum.repository.CategoryRepository;
 import ru.practicum.repository.EventRepository;
 import ru.practicum.repository.LocationRepository;
