@@ -1,7 +1,6 @@
 package ru.practicum.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import ru.practicum.dto.compilation.CompilationDto;
 import ru.practicum.model.Compilation;
 
