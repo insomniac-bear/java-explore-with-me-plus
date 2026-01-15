@@ -21,12 +21,12 @@ public class User {
 
     @Email
     @Length(min = 6, max = 254)
-    @NotNull
-    @Column(nullable = false, unique = true, name = "email")
+    @NotBlank
+    @Column
     private String email;
 
     @Length(min = 2, max = 250)
     @NotBlank
-    @Column(nullable = false, name = "name")
+    @Column
     private String name;
 }

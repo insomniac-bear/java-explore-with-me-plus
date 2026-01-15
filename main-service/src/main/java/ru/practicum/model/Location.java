@@ -21,7 +21,8 @@ public class Location {
     private Long id;
 
     @Size(min = 5, max = 50)
-    @Column(nullable = false, length = 50)
+    @NotBlank
+    @Column
     private String name;
 
     @NotNull
