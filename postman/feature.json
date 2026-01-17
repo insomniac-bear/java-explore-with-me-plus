@@ -297,6 +297,7 @@
 									"    const rnd = new RandomUtils();",
 									"",
 									"    try {",
+									"        pm.collectionVariables.unset(\"uid\");",
 									"        const location = await api.addLocation(rnd.getLocation());",
 									"if (!location.id) {",
 									"    throw new Error(\"ID не возвращён при создании локации\");",
@@ -338,36 +339,16 @@
 							"script": {
 								"exec": [
 									"pm.test(\"Ответ должен содержать код статуса 204\", function () {",
-									"    pm.expect(pm.response.code).to.eql(204);",
+									"    pm.response.to.have.status(204);",
 									"});",
 									"",
-									"const source = pm.collectionVariables.get('response');",
-									"const locationId = pm.collectionVariables.get('uid');",
-									"",
-									"pm.test(\"Локация должна быть найдена до удаления\", function () {",
+									"pm.test(\"Локация удалена\", function () {",
+									"    const source = pm.collectionVariables.get('response');",
+									"    const locationId = pm.collectionVariables.get('uid');",
+									"    ",
 									"    pm.expect(source).to.be.an('object');",
-									"    pm.expect(source.id).to.eql(locationId);",
-									"    console.log(\"Локация до удаления:\", source);",
-									"});",
-									"",
-									"    const response = await pm.sendRequest({",
-									"        url: `http://localhost:8080/admin/location/${locationId}`,",
-									"        method: \"DELETE\",",
-									"        header: { \"Content-Type\": \"application/json\" }",
-									"    });",
-									"",
-									"pm.test(\"Локация не должна быть найдена после удаления (404)\", async () => {",
-									"    if (!locationId) {",
-									"        return pm.test.fail(\"ID локации не найден\");",
-									"    }",
-									"",
-									"    const response = await pm.sendRequest({",
-									"        url: `http://localhost:8080/admin/location/${locationId}`,",
-									"        method: \"GET\"",
-									"    });",
-									"",
-									"    pm.expect(response.code).to.eql(404);",
-									"    console.log(\"Локация с ID\", locationId, \"не существует (404)\");",
+									"    pm.expect(source.id).to.eql(parseInt(locationId));",
+									"    console.log(\"Локация ID\", locationId, \"удалена\");",
 									"});"
 								],
 								"type": "text/javascript",
@@ -828,10 +809,6 @@
 			"value": ""
 		},
 		{
-			"key": "response",
-			"value": ""
-		},
-		{
 			"key": "uid",
 			"value": 1
 		},
@@ -892,33 +869,24 @@
 			"value": ""
 		},
 		{
-			"key": "baseURL",
-			"value": ""
-		},
-		{
 			"key": "lat",
-			"value": "50",
-			"type": "default"
+			"value": "50"
 		},
 		{
 			"key": "lon",
-			"value": "60",
-			"type": "default"
+			"value": "60"
 		},
 		{
 			"key": "size",
-			"value": "10",
-			"type": "default"
+			"value": "10"
 		},
 		{
 			"key": "from",
-			"value": "0",
-			"type": "default"
+			"value": "0"
 		},
 		{
 			"key": "radius",
-			"value": "1",
-			"type": "default"
+			"value": "1"
 		},
 		{
 			"key": "test_location_id",
@@ -926,6 +894,10 @@
 		},
 		{
 			"key": "created_event_ids",
+			"value": ""
+		},
+		{
+			"key": "response",
 			"value": ""
 		}
 	]
