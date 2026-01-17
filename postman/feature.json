@@ -403,14 +403,9 @@
 									"const main = async () => {",
 									"    try {",
 									"        ",
-									"        const lat = parseFloat(pm.request.url.query.get('lat'));",
-									"        const lon = parseFloat(pm.request.url.query.get('lon'));",
-									"        ",
-									"        if (isNaN(lat) || isNaN(lon)) {",
-									"            lat = 50.0;",
-									"            lon = 60.0;",
-									"        }",
-									"        ",
+									"        const lat = 50.0;",
+									"        const lon = 60.0;",
+									"       ",
 									"        const api = new API(pm);",
 									"        const rnd = new RandomUtils();",
 									"        ",
@@ -423,7 +418,7 @@
 									"            name: locationName,",
 									"            latitude: lat,",
 									"            longitude: lon,",
-									"            radius: 0.01,",
+									"            radius: 0.05,",
 									"            type: \"OPEN_AIR\"",
 									"        };",
 									"        ",
@@ -902,28 +897,36 @@
 		},
 		{
 			"key": "lat",
-			"value": "",
+			"value": "50",
 			"type": "default"
 		},
 		{
 			"key": "lon",
-			"value": "",
+			"value": "60",
 			"type": "default"
 		},
 		{
 			"key": "size",
-			"value": "",
+			"value": "10",
 			"type": "default"
 		},
 		{
 			"key": "from",
-			"value": "",
+			"value": "0",
 			"type": "default"
 		},
 		{
 			"key": "radius",
-			"value": "",
+			"value": "1",
 			"type": "default"
+		},
+		{
+			"key": "test_location_id",
+			"value": ""
+		},
+		{
+			"key": "created_event_ids",
+			"value": ""
 		}
 	]
 }
