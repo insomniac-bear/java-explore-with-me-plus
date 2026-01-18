@@ -43,7 +43,7 @@ public class Location {
     private LocationType type;
 
     @Override
-    public String toString(){
+    public String toString() {
        return "Location{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
