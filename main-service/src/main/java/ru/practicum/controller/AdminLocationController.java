@@ -39,9 +39,9 @@ public class AdminLocationController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public LocationResponseDto save(@RequestBody @Valid NewLocationDto dto) {
-        log.info("Save location {}", dto);
-        return locationService.save(dto);
+    public LocationResponseDto create(@RequestBody @Valid NewLocationDto dto) {
+        log.info("Create location {}", dto);
+        return locationService.create(dto);
     }
 
     @PatchMapping("/{locationId}")

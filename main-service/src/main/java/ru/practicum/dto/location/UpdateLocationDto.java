@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class UpdateLocationDto {
+    @NotBlank
     @Size(min = 5, max = 50)
     private String name;
 
