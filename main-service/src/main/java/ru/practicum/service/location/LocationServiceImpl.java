@@ -62,8 +62,9 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public LocationResponseDto save(NewLocationDto dto) {
-        log.info("Save new location {}", dto);
+    @Transactional
+    public LocationResponseDto create(NewLocationDto dto) {
+        log.info("Create new location {}", dto);
         Location location = mapper.toLocation(dto);
         return mapper.toFullResponseDto(repository.save(location));
     }
@@ -76,8 +77,7 @@ public class LocationServiceImpl implements LocationService {
                 .orElseThrow(() -> new NoSuchElementException(
                         "Location with id=" + locationId + " not found"));
         mapper.updateFromDto(dto, existingLocation);
-        Location updatedLocation = repository.save(existingLocation);
-        return mapper.toFullResponseDto(updatedLocation);
+        return mapper.toFullResponseDto(existingLocation);
     }
 
     @Override

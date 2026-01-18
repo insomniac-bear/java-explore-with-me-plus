@@ -2,15 +2,14 @@ package ru.practicum.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import ru.practicum.util.LocationType;
 
 @Entity
 @Table(name = "locations")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -20,6 +19,7 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @Size(min = 5, max = 50)
     @Column(nullable = false, length = 50)
     private String name;
@@ -37,7 +37,20 @@ public class Location {
     @PositiveOrZero
     private Double radius;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 40)
+    @Column
     private LocationType type;
+
+    @Override
+    public String toString(){
+       return "Location{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", radius=" + radius +
+                ", type=" + type +
+                '}';
+    }
 }

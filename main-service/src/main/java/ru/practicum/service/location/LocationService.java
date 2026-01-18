@@ -18,7 +18,7 @@ public interface LocationService {
 
     ShortLocationResponseDto findByIdShort(Long locationId);
 
-    LocationResponseDto save(NewLocationDto dto);
+    LocationResponseDto create(NewLocationDto dto);
 
     LocationResponseDto update(Long locationId, UpdateLocationDto dto);
 

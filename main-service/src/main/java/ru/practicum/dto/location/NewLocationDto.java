@@ -11,6 +11,7 @@ import ru.practicum.util.LocationType;
 @NoArgsConstructor
 public class NewLocationDto {
 
+    @NotBlank
     @Size(min = 5, max = 50)
     private String name;
 

@@ -2,15 +2,13 @@ package ru.practicum.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -29,4 +27,9 @@ public class User {
     @NotBlank
     @Column(nullable = false, name = "name")
     private String name;
+
+    @Override
+    public String toString() {
+        return "User{" + "id=" + id + ", email=" + email + ", name=" + name + '}';
+    }
 }
