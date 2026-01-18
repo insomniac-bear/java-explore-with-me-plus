@@ -3,7 +3,6 @@ package ru.practicum.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 import ru.practicum.util.LocationType;
 
 @Entity
